@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './entity/customer.entity';
 import { In, Repository } from 'typeorm';
+import { CreateCustomerDto } from './dto/create-customer.dto';
 
 @Injectable()
 export class CustomerRepository {
@@ -44,5 +45,25 @@ export class CustomerRepository {
     }
 
     return [];
+  }
+
+  /* 회원 등록 */
+  async createCustomer(
+    createCustomerDto: CreateCustomerDto,
+  ): Promise<Customer> {
+    const { name, gender, phoneNumber, birthDate, address } = createCustomerDto;
+    const newCustomer = this.customerRepository.create({
+      name,
+      gender,
+      phoneNumber,
+      birthDate,
+      address,
+    });
+    return await this.customerRepository.save(newCustomer);
+  }
+
+  /* 전체 회원 조회 */
+  async findAllCustomers(): Promise<Customer[]> {
+    return await this.customerRepository.find();
   }
 }

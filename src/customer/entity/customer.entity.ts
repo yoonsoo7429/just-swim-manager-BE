@@ -29,11 +29,11 @@ export class Customer {
   address: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  userCreatedAt: Date;
+  customerCreatedAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  userUpdatedAt: Date;
+  customerUpdatedAt: Date;
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  userDeletedAt: Date;
+  customerDeletedAt: Date;
 }
