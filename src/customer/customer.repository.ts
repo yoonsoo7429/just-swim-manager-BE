@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './entity/customer.entity';
-import { In, Repository } from 'typeorm';
+import { In, Repository, UpdateResult } from 'typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
+import { EditCustomerDto } from './dto/edit-customer.dto';
 
 @Injectable()
 export class CustomerRepository {
@@ -65,5 +66,22 @@ export class CustomerRepository {
   /* 전체 회원 조회 */
   async findAllCustomers(): Promise<Customer[]> {
     return await this.customerRepository.find();
+  }
+
+  /* 회원 조회 */
+  async findCustomer(customerId: number): Promise<Customer> {
+    return await this.customerRepository.findOne({ where: { customerId } });
+  }
+
+  /* 회원 정보 수정 */
+  async editCustomer(
+    customerId: number,
+    editCustomerDto: EditCustomerDto,
+  ): Promise<UpdateResult> {
+    const { name, gender, phoneNumber, birthDate, address } = editCustomerDto;
+    return await this.customerRepository.update(
+      { customerId },
+      { name, gender, phoneNumber, birthDate, address },
+    );
   }
 }
