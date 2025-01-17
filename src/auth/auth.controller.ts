@@ -11,9 +11,29 @@ export class AuthController {
     private readonly responseService: ResponseService,
   ) {}
 
-  @Post()
+  /* 관리자 signin */
+  @Post('signin')
   adminSignin(@Res() res: Response, @Body() adminSigninDto: AdminSigninDto) {
+    // 관리자 인증
     this.authService.validateAdmin(adminSigninDto);
-    this.responseService.success(res, 'signin 성공', 'admin-auth-token');
+
+    // JWT 생성
+    const token = this.authService.generateJwtToken({ id: adminSigninDto.id });
+
+    // HTTP-only 쿠키에 JWT 저장
+    res.cookie('authorization', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    this.responseService.success(res, 'signin 성공');
+  }
+
+  /* 관리자 logout */
+  @Post('logout')
+  adminLogout(@Res() res: Response) {
+    // 쿠키 삭제
+    res.clearCookie('authorization');
+    this.responseService.success(res, '로그아웃 성공');
   }
 }

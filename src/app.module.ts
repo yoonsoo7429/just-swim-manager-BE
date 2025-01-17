@@ -7,6 +7,7 @@ import { CustomerModule } from './customer/customer.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { AuthModule } from './auth/auth.module';
 import { ReponseModule } from './common/reponse/reponse.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import { ReponseModule } from './common/reponse/reponse.module';
     ReponseModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtService],
 })
 export class AppModule {}
