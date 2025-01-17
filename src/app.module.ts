@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,6 +13,7 @@ import { UploadsModule } from './uploads/uploads.module';
 import { AuthModule } from './auth/auth.module';
 import { ReponseModule } from './common/reponse/reponse.module';
 import { JwtService } from '@nestjs/jwt';
+import { AuthMiddleWare } from './auth/middleware/auth.middleware';
 
 @Module({
   imports: [
@@ -36,4 +42,12 @@ import { JwtService } from '@nestjs/jwt';
   controllers: [AppController],
   providers: [AppService, JwtService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  // middleware 전역으로 사용
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleWare).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
+  }
+}
