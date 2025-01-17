@@ -45,9 +45,12 @@ import { AuthMiddleWare } from './auth/middleware/auth.middleware';
 export class AppModule implements NestModule {
   // middleware 전역으로 사용
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleWare).forRoutes({
-      path: '*',
-      method: RequestMethod.ALL,
-    });
+    consumer
+      .apply(AuthMiddleWare)
+      .exclude({ path: 'auth/signin', method: RequestMethod.POST })
+      .forRoutes({
+        path: '*',
+        method: RequestMethod.ALL,
+      });
   }
 }
