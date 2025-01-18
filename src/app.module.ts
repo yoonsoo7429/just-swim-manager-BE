@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import { ReponseModule } from './common/reponse/reponse.module';
 import { JwtService } from '@nestjs/jwt';
 import { AuthMiddleWare } from './auth/middleware/auth.middleware';
+import { LectureModule } from './lecture/lecture.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AuthMiddleWare } from './auth/middleware/auth.middleware';
     UploadsModule,
     AuthModule,
     ReponseModule,
+    LectureModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
