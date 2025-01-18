@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { Response } from 'express';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -31,7 +40,7 @@ export class CustomerController {
   }
 
   /* 회원 조회 */
-  @Get('customerId')
+  @Get(':customerId')
   async getCustomer(
     @Res() res: Response,
     @Param('customerId') customerId: number,
@@ -41,7 +50,7 @@ export class CustomerController {
   }
 
   /* 회원 정보 수정 */
-  @Patch('customerId')
+  @Patch(':customerId')
   async updateCustomer(
     @Res() res: Response,
     @Param('customerId') customerId: number,
@@ -50,5 +59,16 @@ export class CustomerController {
     await this.customerService.updateCustomer(customerId, editCustomerDto);
 
     this.responseService.success(res, '회원 정보 수정 성공');
+  }
+
+  /* 회원 정보 삭제 (soft delete) */
+  @Delete(':customerId')
+  async softDeleteCustomer(
+    @Res() res: Response,
+    @Param('customerId') customerId: number,
+  ) {
+    await this.customerService.softDeleteCustomer(customerId);
+
+    this.responseService.success(res, '회원 정보 삭제 성공');
   }
 }

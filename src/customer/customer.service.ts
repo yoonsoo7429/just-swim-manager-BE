@@ -3,7 +3,6 @@ import { CustomerRepository } from './customer.repository';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { Customer } from './entity/customer.entity';
 import { EditCustomerDto } from './dto/edit-customer.dto';
-import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class CustomerService {
@@ -32,10 +31,12 @@ export class CustomerService {
   async updateCustomer(
     customerId: number,
     editCustomerDto: EditCustomerDto,
-  ): Promise<UpdateResult> {
-    return await this.customerRepository.editCustomer(
-      customerId,
-      editCustomerDto,
-    );
+  ): Promise<void> {
+    await this.customerRepository.editCustomer(customerId, editCustomerDto);
+  }
+
+  /* 회원 정보 삭제 (soft delete) */
+  async softDeleteCustomer(customerId: number): Promise<void> {
+    await this.customerRepository.softDeleteCustomer(customerId);
   }
 }

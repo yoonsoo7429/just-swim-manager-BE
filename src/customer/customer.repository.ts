@@ -84,4 +84,12 @@ export class CustomerRepository {
       { name, gender, phoneNumber, birthDate, address },
     );
   }
+
+  /* 회원 정보 삭제 (soft delete) */
+  async softDeleteCustomer(customerId: number): Promise<UpdateResult> {
+    return await this.customerRepository.update(
+      { customerId },
+      { customerDeletedAt: new Date() },
+    );
+  }
 }
