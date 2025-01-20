@@ -13,10 +13,11 @@ export class MemberRepository {
 
   /* 수강생 등록 */
   async createMember(createMemberDto: CreateMemberDto): Promise<Member> {
-    const { customerId, lectureId } = createMemberDto;
+    const { customerId, lectureId, memberRegistrationDate } = createMemberDto;
     const newMember = this.memberRepository.create({
       customer: { customerId },
       lecture: { lectureId },
+      memberRegistrationDate,
     });
 
     await this.memberRepository.save(newMember);
@@ -28,10 +29,14 @@ export class MemberRepository {
     memberId: number,
     editMemberDto: EditMemberDto,
   ): Promise<UpdateResult> {
-    const { customerId, lectureId } = editMemberDto;
+    const { customerId, lectureId, memberRegistrationDate } = editMemberDto;
     return await this.memberRepository.update(
       { memberId },
-      { customer: { customerId }, lecture: { lectureId } },
+      {
+        customer: { customerId },
+        lecture: { lectureId },
+        memberRegistrationDate,
+      },
     );
   }
 

@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class EditPaymentDto {
   @IsOptional()
@@ -8,4 +8,12 @@ export class EditPaymentDto {
   @IsOptional()
   @IsNumber()
   lectureId: number;
+
+  @IsOptional()
+  @IsString()
+  paymentFee: string;
+
+  @IsOptional()
+  @IsString()
+  paymentDate: string;
 }

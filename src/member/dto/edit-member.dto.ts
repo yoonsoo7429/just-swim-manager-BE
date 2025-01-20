@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class EditMemberDto {
   @IsOptional()
@@ -8,4 +8,8 @@ export class EditMemberDto {
   @IsOptional()
   @IsNumber()
   lectureId: number;
+
+  @IsOptional()
+  @IsString()
+  memberRegistrationDate: string;
 }

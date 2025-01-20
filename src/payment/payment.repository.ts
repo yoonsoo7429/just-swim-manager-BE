@@ -13,10 +13,12 @@ export class PaymentRepository {
 
   /* 수강료 지불 */
   async createPayment(createPaymentDto: CreatePaymentDto): Promise<Payment> {
-    const { customerId, lectureId } = createPaymentDto;
+    const { customerId, lectureId, paymentFee, paymentDate } = createPaymentDto;
     const newPayment = this.paymentRepository.create({
       customer: { customerId },
       lecture: { lectureId },
+      paymentFee,
+      paymentDate,
     });
     await this.paymentRepository.save(newPayment);
     return newPayment;
@@ -27,12 +29,14 @@ export class PaymentRepository {
     paymentId: number,
     editPaymentDto: EditPaymentDto,
   ): Promise<UpdateResult> {
-    const { customerId, lectureId } = editPaymentDto;
+    const { customerId, lectureId, paymentFee, paymentDate } = editPaymentDto;
     return await this.paymentRepository.update(
       { paymentId },
       {
         customer: { customerId },
         lecture: { lectureId },
+        paymentFee,
+        paymentDate,
       },
     );
   }

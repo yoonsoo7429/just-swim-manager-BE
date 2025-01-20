@@ -1,6 +1,7 @@
 import { Customer } from 'src/customer/entity/customer.entity';
 import { Lecture } from 'src/lecture/entity/lecture.entity';
 import {
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
@@ -22,6 +23,12 @@ export class Payment {
   @ManyToOne(() => Lecture, (lecture) => lecture.payment)
   @JoinColumn({ name: 'lectureId' })
   lecture: Lecture;
+
+  @Column('varchar')
+  paymentFee: string;
+
+  @Column('varchar')
+  paymentDate: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   paymentCreatedAt: Date;
