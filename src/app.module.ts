@@ -15,6 +15,7 @@ import { ReponseModule } from './common/reponse/reponse.module';
 import { JwtService } from '@nestjs/jwt';
 import { AuthMiddleWare } from './auth/middleware/auth.middleware';
 import { LectureModule } from './lecture/lecture.module';
+import { MemberModule } from './member/member.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { LectureModule } from './lecture/lecture.module';
     AuthModule,
     ReponseModule,
     LectureModule,
+    MemberModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

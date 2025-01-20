@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CustomerGender } from '../enum/customer-gender.enum';
+import { Member } from 'src/member/entity/member.entity';
 
 @Entity('customer')
 export class Customer {
@@ -36,4 +38,7 @@ export class Customer {
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   customerDeletedAt: Date;
+
+  @OneToMany(() => Member, (member) => member.customer)
+  member: Member[];
 }

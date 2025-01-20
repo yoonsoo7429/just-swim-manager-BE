@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { LectureLevel } from '../enum/lecture-level.enum';
+import { Member } from 'src/member/entity/member.entity';
 
 @Entity('lecture')
 export class Lecture {
@@ -36,4 +38,7 @@ export class Lecture {
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   lectureDeletedAt: Date;
+
+  @OneToMany(() => Member, (member) => member.lecture)
+  member: Member[];
 }
