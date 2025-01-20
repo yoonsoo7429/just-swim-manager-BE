@@ -17,7 +17,7 @@ import { EditMemberDto } from './dto/edit-member.dto';
 export class MemberController {
   constructor(
     private readonly memberService: MemberService,
-    private readonly responsService: ResponseService,
+    private readonly responseService: ResponseService,
   ) {}
 
   /* 수강생 등록 */
@@ -27,7 +27,7 @@ export class MemberController {
     @Body() createMemberDto: CreateMemberDto,
   ) {
     const newMember = await this.memberService.createMember(createMemberDto);
-    this.responsService.success(res, '수강생 등록 성공', newMember);
+    this.responseService.success(res, '수강생 등록 성공', newMember);
   }
 
   /* 수강생 수정 */
@@ -38,7 +38,7 @@ export class MemberController {
     @Body() editMemberDto: EditMemberDto,
   ) {
     await this.memberService.editMember(memberId, editMemberDto);
-    this.responsService.success(res, '수강생 업데이트 성공');
+    this.responseService.success(res, '수강생 업데이트 성공');
   }
 
   /* 수강생 수강 취소 */
@@ -48,6 +48,6 @@ export class MemberController {
     @Param('memberId') memberId: number,
   ) {
     await this.memberService.softDeleteMember(memberId);
-    this.responsService.success(res, '수강생 수강 취소 성공');
+    this.responseService.success(res, '수강생 수강 취소 성공');
   }
 }

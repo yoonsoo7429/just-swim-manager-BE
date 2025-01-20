@@ -10,25 +10,25 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('member')
-export class Member {
+@Entity('payment')
+export class Payment {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
-  memberId: number;
+  paymentId: number;
 
-  @ManyToOne(() => Customer, (customer) => customer.member)
+  @ManyToOne(() => Customer, (customer) => customer.payment)
   @JoinColumn({ name: 'customerId' })
   customer: Customer;
 
-  @ManyToOne(() => Lecture, (lecture) => lecture.member)
+  @ManyToOne(() => Lecture, (lecture) => lecture.payment)
   @JoinColumn({ name: 'lectureId' })
   lecture: Lecture;
 
   @CreateDateColumn({ type: 'timestamp' })
-  memberCreatedAt: Date;
+  paymentCreatedAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  memberUpdatedAt: Date;
+  paymentUpdatedAt: Date;
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  memberDeletedAt: Date;
+  paymentDeletedAt: Date;
 }

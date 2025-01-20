@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { LectureLevel } from '../enum/lecture-level.enum';
 import { Member } from 'src/member/entity/member.entity';
+import { Payment } from 'src/payment/entity/payment.entity';
 
 @Entity('lecture')
 export class Lecture {
@@ -41,4 +42,7 @@ export class Lecture {
 
   @OneToMany(() => Member, (member) => member.lecture)
   member: Member[];
+
+  @OneToMany(() => Payment, (payment) => payment.lecture)
+  payment: Payment[];
 }

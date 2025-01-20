@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { CustomerGender } from '../enum/customer-gender.enum';
 import { Member } from 'src/member/entity/member.entity';
+import { Payment } from 'src/payment/entity/payment.entity';
 
 @Entity('customer')
 export class Customer {
@@ -41,4 +42,7 @@ export class Customer {
 
   @OneToMany(() => Member, (member) => member.customer)
   member: Member[];
+
+  @OneToMany(() => Payment, (payment) => payment.customer)
+  payment: Payment[];
 }
