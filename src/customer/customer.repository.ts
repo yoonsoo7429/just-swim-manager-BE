@@ -68,9 +68,12 @@ export class CustomerRepository {
     return await this.customerRepository.find();
   }
 
-  /* 회원 조회 */
-  async findCustomer(customerId: number): Promise<Customer> {
-    return await this.customerRepository.findOne({ where: { customerId } });
+  /* 회원 상세 조회 */
+  async findCustomerDetail(customerId: number): Promise<Customer> {
+    return await this.customerRepository.findOne({
+      where: { customerId },
+      relations: ['member', 'payment'],
+    });
   }
 
   /* 회원 정보 수정 */

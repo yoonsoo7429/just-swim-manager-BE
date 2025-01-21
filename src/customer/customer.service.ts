@@ -3,6 +3,7 @@ import { CustomerRepository } from './customer.repository';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { Customer } from './entity/customer.entity';
 import { EditCustomerDto } from './dto/edit-customer.dto';
+import { CustomerDetail } from './type/customer-detail.type';
 
 @Injectable()
 export class CustomerService {
@@ -22,9 +23,79 @@ export class CustomerService {
     return await this.customerRepository.findAllCustomers();
   }
 
-  /* 회원 조회 */
-  async getCustomer(customerId: number): Promise<Customer> {
-    return await this.customerRepository.findCustomer(customerId);
+  /* 회원 상세 조회 */
+  async getCustomerDetail(customerId: number): Promise<CustomerDetail> {
+    const result = await this.customerRepository.findCustomerDetail(customerId);
+
+    const customerInfo = {
+      customer: {
+        customerId: result.customerId,
+        name: result.name,
+        gender: result.gender,
+        phoneNumber: result.phoneNumber,
+        birthDate: result.birthDate,
+        address: result.address,
+        customerCreatedAt: result.customerCreatedAt,
+        customerUpdatedAt: result.customerUpdatedAt,
+        customerDeletedAt: result.customerDeletedAt,
+      },
+      lecture:
+        result.member && result.member.length > 0
+          ? result.member.reduce((acc: any, member: any) => {
+              if (member.lecture) {
+                const {
+                  lectureId,
+                  lectureTitle,
+                  lectureLevel,
+                  lectureDays,
+                  lectureTime,
+                  lectureAmount,
+                  lectureCreatedAt,
+                  lectureUpdatedAt,
+                  lectureDeletedAt,
+                } = member.lecture;
+                let lectureGroup = acc.find(
+                  (group) => group.lectureId === lectureId,
+                );
+                if (!lectureGroup) {
+                  lectureGroup = {
+                    lectureId,
+                    lectureTitle,
+                    lectureLevel,
+                    lectureDays,
+                    lectureTime,
+                    lectureAmount,
+                    lectureCreatedAt,
+                    lectureUpdatedAt,
+                    lectureDeletedAt,
+                    member: [],
+                  };
+                  acc.push(lectureGroup);
+                }
+
+                // 해당 강의에 member 정보를 추가
+                lectureGroup.member.push({
+                  memberId: member.memberId,
+                  memberRegistrationDate: member.memberRegistrationDate,
+                  memberDeletedAt: member.memberDeletedAt,
+                });
+              }
+
+              return acc;
+            }, [])
+          : [],
+      payment:
+        result.payment && result.payment.length > 0
+          ? result.payment.map((payment) => ({
+              paymentId: payment.paymentId,
+              paymentFee: payment.paymentFee,
+              paymentDate: payment.paymentDate,
+              paymentDeletedAt: payment.paymentDeletedAt,
+            }))
+          : [],
+    };
+
+    return customerInfo;
   }
 
   /* 회원 정보 수정 */

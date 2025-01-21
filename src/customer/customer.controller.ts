@@ -39,13 +39,13 @@ export class CustomerController {
     this.responseService.success(res, '전체 회원 조회 성공', allCustomers);
   }
 
-  /* 회원 조회 */
+  /* 회원 상세 조회 */
   @Get(':customerId')
   async getCustomer(
     @Res() res: Response,
     @Param('customerId') customerId: number,
   ) {
-    const customer = await this.customerService.getCustomer(customerId);
+    const customer = await this.customerService.getCustomerDetail(customerId);
     this.responseService.success(res, '회원 조회 성공', customer);
   }
 
