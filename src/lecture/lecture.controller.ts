@@ -40,7 +40,7 @@ export class LectureController {
     this.responseService.success(res, '수업 전체 조회 성공', lectures);
   }
 
-  /* 수업 조회 */
+  /* 수업 상세 조회 */
   @Get(':lectureId')
   async findLecture(
     @Res() res: Response,

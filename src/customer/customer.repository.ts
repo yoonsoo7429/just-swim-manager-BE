@@ -15,14 +15,19 @@ export class CustomerRepository {
 
   /* 변환된 회원 정보를 저장 */
   async createCustomerByXlsx(customerData: any[]): Promise<Customer[]> {
-    // 중복 체크
-    const phoneNumbers = customerData.map((data) => data.phoneNumber);
+    if (!customerData || customerData.length === 0) {
+      return [];
+    }
+
+    const uniquePhoneNumbers = [
+      ...new Set(customerData.map((data) => data.phoneNumber)),
+    ];
 
     const existingPhoneNumbers = await this.customerRepository
       .createQueryBuilder('customer')
       .select('customer.phoneNumber')
       .where('customer.phoneNumber IN (:...phoneNumbers)', {
-        phoneNumbers: customerData.map((data) => data.phoneNumber),
+        phoneNumbers: uniquePhoneNumbers,
       })
       .getMany();
 
@@ -34,19 +39,13 @@ export class CustomerRepository {
       (data) => !existingPhoneNumbersSet.has(data.phoneNumber),
     );
 
-    if (customersToSave.length > 0) {
-      // 새로운 고객 데이터 저장
-      const savedCustomers = await this.customerRepository
-        .createQueryBuilder()
-        .insert()
-        .into(Customer)
-        .values(customersToSave)
-        .execute();
-
-      return savedCustomers.raw;
+    if (customersToSave.length === 0) {
+      return [];
     }
 
-    return [];
+    const savedCustomers = await this.customerRepository.save(customersToSave);
+
+    return savedCustomers;
   }
 
   /* 회원 등록 */
