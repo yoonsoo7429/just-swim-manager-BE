@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './entity/customer.entity';
-import { In, Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { EditCustomerDto } from './dto/edit-customer.dto';
+import { Member } from 'src/member/entity/member.entity';
 
 @Injectable()
 export class CustomerRepository {
@@ -80,19 +81,28 @@ export class CustomerRepository {
   async editCustomer(
     customerId: number,
     editCustomerDto: EditCustomerDto,
-  ): Promise<UpdateResult> {
+  ): Promise<void> {
     const { name, gender, phoneNumber, birthDate, address } = editCustomerDto;
-    return await this.customerRepository.update(
+    await this.customerRepository.update(
       { customerId },
       { name, gender, phoneNumber, birthDate, address },
     );
   }
 
   /* 회원 정보 삭제 (soft delete) */
-  async softDeleteCustomer(customerId: number): Promise<UpdateResult> {
-    return await this.customerRepository.update(
-      { customerId },
-      { customerDeletedAt: new Date() },
-    );
+  async softDeleteCustomer(customerId: number): Promise<void> {
+    await this.customerRepository.manager.transaction(async (manager) => {
+      await manager.update(
+        Customer,
+        { customerId },
+        { customerDeletedAt: new Date() },
+      );
+
+      await manager.update(
+        Member,
+        { customer: { customerId } },
+        { memberDeletedAt: new Date() },
+      );
+    });
   }
 }
