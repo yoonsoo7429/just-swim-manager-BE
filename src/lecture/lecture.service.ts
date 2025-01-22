@@ -18,7 +18,7 @@ export class LectureService {
     return await this.lectureRepository.findAllLectures();
   }
 
-  /* 수업 조회 */
+  /* 수업 상세 조회 */
   async findLecture(lectureId: number): Promise<Lecture> {
     return await this.lectureRepository.findLecture(lectureId);
   }

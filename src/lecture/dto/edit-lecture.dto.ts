@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { LectureLevel } from '../enum/lecture-level.enum';
 
 export class EditLectureDto {
@@ -20,5 +20,9 @@ export class EditLectureDto {
 
   @IsOptional()
   @IsString()
-  lectureAmount?: string;
+  lectureFee?: string;
+
+  @IsOptional()
+  @IsNumber()
+  lectureCapacity?: number;
 }

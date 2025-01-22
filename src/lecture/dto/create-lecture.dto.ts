@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { LectureLevel } from '../enum/lecture-level.enum';
 
 export class CreateLectureDto {
@@ -20,5 +20,9 @@ export class CreateLectureDto {
 
   @IsNotEmpty()
   @IsString()
-  lectureAmount: string;
+  lectureFee: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  lectureCapacity: number;
 }

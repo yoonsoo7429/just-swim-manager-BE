@@ -29,7 +29,10 @@ export class Lecture {
   lectureTime: string;
 
   @Column({ type: 'varchar' })
-  lectureAmount: string;
+  lectureFee: string;
+
+  @Column({ type: 'bigint' })
+  lectureCapacity: number;
 
   @CreateDateColumn({ type: 'timestamp' })
   lectureCreatedAt: Date;

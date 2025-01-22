@@ -19,14 +19,16 @@ export class LectureRepository {
       lectureLevel,
       lectureDays,
       lectureTime,
-      lectureAmount,
+      lectureFee,
+      lectureCapacity,
     } = createLectureDto;
     const newLecture = this.lectureRepository.create({
       lectureTitle,
       lectureLevel,
       lectureDays,
       lectureTime,
-      lectureAmount,
+      lectureFee,
+      lectureCapacity,
     });
     await this.lectureRepository.save(newLecture);
     return newLecture;
@@ -37,9 +39,12 @@ export class LectureRepository {
     return await this.lectureRepository.find();
   }
 
-  /* 수업 조회 */
+  /* 수업 상세 조회 */
   async findLecture(lectureId: number): Promise<Lecture> {
-    return await this.lectureRepository.findOne({ where: { lectureId } });
+    return await this.lectureRepository.findOne({
+      where: { lectureId },
+      relations: ['member'],
+    });
   }
 
   /* 수업 수정 */
@@ -52,11 +57,19 @@ export class LectureRepository {
       lectureLevel,
       lectureDays,
       lectureTime,
-      lectureAmount,
+      lectureFee,
+      lectureCapacity,
     } = editLectureDto;
     return await this.lectureRepository.update(
       { lectureId },
-      { lectureTitle, lectureLevel, lectureDays, lectureTime, lectureAmount },
+      {
+        lectureTitle,
+        lectureLevel,
+        lectureDays,
+        lectureTime,
+        lectureFee,
+        lectureCapacity,
+      },
     );
   }
 
