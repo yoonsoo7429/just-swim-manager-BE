@@ -26,7 +26,7 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
     });
 
-    this.responseService.success(res, 'signin 성공');
+    this.responseService.success(res, 'signin 성공', token);
   }
 
   /* 관리자 logout */

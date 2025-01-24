@@ -5,7 +5,7 @@ import { Response } from 'express';
 export class ResponseService {
   success(res: Response, message: string, data: any = null) {
     return res.status(200).json({
-      success: true,
+      status: true,
       message: message,
       data: data,
     });
@@ -18,7 +18,7 @@ export class ResponseService {
     errors: any = null,
   ) {
     return res.status(statusCode).json({
-      success: false,
+      status: false,
       message,
       errors,
     });
