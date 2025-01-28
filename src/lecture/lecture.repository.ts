@@ -36,7 +36,7 @@ export class LectureRepository {
 
   /* 수업 전체 조회 */
   async findAllLectures(): Promise<Lecture[]> {
-    return await this.lectureRepository.find();
+    return await this.lectureRepository.find({ relations: ['member'] });
   }
 
   /* 수업 상세 조회 */

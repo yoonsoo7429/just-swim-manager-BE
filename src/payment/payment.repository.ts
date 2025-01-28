@@ -48,4 +48,9 @@ export class PaymentRepository {
       { paymentDeletedAt: new Date() },
     );
   }
+
+  /* 전체 결제 정보 조회 */
+  async findAllPayments(): Promise<Payment[]> {
+    return await this.paymentRepository.find();
+  }
 }
