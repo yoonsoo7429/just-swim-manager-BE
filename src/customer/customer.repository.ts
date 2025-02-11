@@ -23,29 +23,44 @@ export class CustomerRepository {
       ...new Set(customerData.map((data) => data.phoneNumber)),
     ];
 
-    const existingPhoneNumbers = await this.customerRepository
+    const existingCustomers = await this.customerRepository
       .createQueryBuilder('customer')
-      .select('customer.phoneNumber')
       .where('customer.phoneNumber IN (:...phoneNumbers)', {
         phoneNumbers: uniquePhoneNumbers,
       })
+      .withDeleted()
       .getMany();
 
-    const existingPhoneNumbersSet = new Set(
-      existingPhoneNumbers.map((customer) => customer.phoneNumber),
+    const restoredCustomers = existingCustomers.filter(
+      (customer) => customer.customerDeletedAt !== null,
     );
 
-    const customersToSave = customerData.filter(
-      (data) => !existingPhoneNumbersSet.has(data.phoneNumber),
-    );
-
-    if (customersToSave.length === 0) {
-      return [];
+    if (restoredCustomers.length > 0) {
+      await this.customerRepository
+        .createQueryBuilder()
+        .update(Customer)
+        .set({ customerDeletedAt: null })
+        .where('phoneNumber IN (:...phoneNumbers)', {
+          phoneNumbers: restoredCustomers.map((c) => c.phoneNumber),
+        })
+        .execute();
     }
 
-    const savedCustomers = await this.customerRepository.save(customersToSave);
+    const existingPhoneNumbers = new Set(
+      existingCustomers.map((c) => c.phoneNumber),
+    );
 
-    return savedCustomers;
+    const newCustomers = customerData.filter(
+      (data) => !existingPhoneNumbers.has(data.phoneNumber),
+    );
+
+    if (newCustomers.length === 0) {
+      return restoredCustomers;
+    }
+
+    const savedNewCustomers = await this.customerRepository.save(newCustomers);
+
+    return [...restoredCustomers, ...savedNewCustomers];
   }
 
   /* 회원 등록 */

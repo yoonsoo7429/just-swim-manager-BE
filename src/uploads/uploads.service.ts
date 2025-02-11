@@ -25,7 +25,7 @@ export class UploadsService {
     }));
 
     try {
-      // fs.unlinkSync(filePath);
+      fs.unlinkSync(filePath);
     } catch (error) {
       console.error('파일 삭제 중 오류 발생:', error);
     }

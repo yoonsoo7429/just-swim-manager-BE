@@ -43,7 +43,7 @@ export class LectureRepository {
   async findLecture(lectureId: number): Promise<Lecture> {
     return await this.lectureRepository.findOne({
       where: { lectureId },
-      relations: ['member'],
+      relations: ['member', 'member.customer'],
     });
   }
 
