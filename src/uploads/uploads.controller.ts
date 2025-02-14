@@ -14,7 +14,6 @@ export class UploadsController {
   @Post('excel')
   @UseInterceptors(FileInterceptor('file'))
   async uploadExcel(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
     const extractedData = await this.uploadsService.uploadExcel(file.path);
 
     return { message: '엑셀 파일 처리 완료', data: extractedData };
