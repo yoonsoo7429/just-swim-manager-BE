@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import * as fs from 'fs';
 
 @Injectable()
-export class UploadsService {
+export class ExcelService {
   constructor(private readonly customerRepository: CustomerRepository) {}
 
   /* 정리된 회원 정보 upload(excel) */
@@ -34,5 +34,27 @@ export class UploadsService {
       await this.customerRepository.createCustomerByXlsx(customerData);
 
     return savedCustomers;
+  }
+
+  /* 회원 정보 excel로 내보내기 */
+  async exportExcel(): Promise<Buffer> {
+    const customers = await this.customerRepository.findAllCustomers();
+
+    const customerData = customers.map((customer) => ({
+      name: customer.name,
+      gender: customer.gender,
+      phoneNumber: customer.phoneNumber,
+      birthDate: customer.birthDate,
+      address: customer.address,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(customerData);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '고객 정보');
+
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
+
+    return excelBuffer;
   }
 }

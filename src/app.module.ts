@@ -9,7 +9,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CustomerModule } from './customer/customer.module';
-import { UploadsModule } from './uploads/uploads.module';
+import { ExcelModule } from './excel/excel.module';
 import { AuthModule } from './auth/auth.module';
 import { ReponseModule } from './common/reponse/reponse.module';
 import { JwtService } from '@nestjs/jwt';
@@ -38,7 +38,7 @@ import { PaymentModule } from './payment/payment.module';
       inject: [ConfigService],
     }),
     CustomerModule,
-    UploadsModule,
+    ExcelModule,
     AuthModule,
     ReponseModule,
     LectureModule,
