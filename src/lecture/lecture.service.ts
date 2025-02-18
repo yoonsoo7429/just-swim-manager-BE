@@ -14,13 +14,13 @@ export class LectureService {
   }
 
   /* 수업 전체 조회 */
-  async findAllLectures(): Promise<Lecture[]> {
+  async getAllLectures(): Promise<Lecture[]> {
     return await this.lectureRepository.findAllLectures();
   }
 
   /* 수업 상세 조회 */
-  async findLecture(lectureId: number): Promise<Lecture> {
-    return await this.lectureRepository.findLecture(lectureId);
+  async getLectureDetail(lectureId: number): Promise<Lecture> {
+    return await this.lectureRepository.findLectureDetail(lectureId);
   }
 
   /* 수업 수정 */

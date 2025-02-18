@@ -34,19 +34,19 @@ export class LectureController {
 
   /* 수업 전체 조회 */
   @Get()
-  async findAllLectures(@Res() res: Response) {
-    const lectures = await this.lectureService.findAllLectures();
+  async getAllLectures(@Res() res: Response) {
+    const lectures = await this.lectureService.getAllLectures();
 
     this.responseService.success(res, '수업 전체 조회 성공', lectures);
   }
 
   /* 수업 상세 조회 */
   @Get(':lectureId')
-  async findLecture(
+  async getLectureDetail(
     @Res() res: Response,
     @Param('lectureId') lectureId: number,
   ) {
-    const lecture = await this.lectureService.findLecture(lectureId);
+    const lecture = await this.lectureService.getLectureDetail(lectureId);
 
     this.responseService.success(res, '수업 조회 성공', lecture);
   }

@@ -41,7 +41,7 @@ export class CustomerController {
 
   /* 회원 상세 조회 */
   @Get(':customerId')
-  async getCustomer(
+  async getCustomerDetail(
     @Res() res: Response,
     @Param('customerId') customerId: number,
   ) {

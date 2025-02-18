@@ -53,4 +53,9 @@ export class PaymentRepository {
   async findAllPayments(): Promise<Payment[]> {
     return await this.paymentRepository.find();
   }
+
+  /* 결제 상세 정보 조회 */
+  async findPaymentDetail(paymentId: number): Promise<Payment> {
+    return await this.paymentRepository.findOne({ where: { paymentId } });
+  }
 }

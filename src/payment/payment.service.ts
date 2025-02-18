@@ -8,6 +8,16 @@ import { EditPaymentDto } from './dto/edit-payment.dto';
 export class PaymentService {
   constructor(private readonly paymentRepository: PaymentRepository) {}
 
+  /* 전체 조회 */
+  async getAllPayments(): Promise<Payment[]> {
+    return await this.paymentRepository.findAllPayments();
+  }
+
+  /* 결제 정보 상세 조회 */
+  async getPaymentDetail(paymentId: number): Promise<Payment> {
+    return await this.paymentRepository.findPaymentDetail(paymentId);
+  }
+
   /* 수강료 지불 */
   async createPayment(createPaymentDto: CreatePaymentDto): Promise<Payment> {
     return await this.paymentRepository.createPayment(createPaymentDto);

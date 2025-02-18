@@ -40,7 +40,7 @@ export class LectureRepository {
   }
 
   /* 수업 상세 조회 */
-  async findLecture(lectureId: number): Promise<Lecture> {
+  async findLectureDetail(lectureId: number): Promise<Lecture> {
     return await this.lectureRepository.findOne({
       where: { lectureId },
       relations: ['member', 'member.customer'],

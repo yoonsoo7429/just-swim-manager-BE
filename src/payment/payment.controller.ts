@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Patch,
   Post,
@@ -19,6 +20,25 @@ export class PaymentController {
     private readonly paymentService: PaymentService,
     private readonly responseService: ResponseService,
   ) {}
+
+  /* 전체 조회 */
+  @Get()
+  async getAllPayments(@Res() res: Response) {
+    const payments = await this.paymentService.getAllPayments();
+
+    this.responseService.success(res, '결제 정보 전체 조회 성공', payments);
+  }
+
+  /* 상세 조회 */
+  @Get(':paymentId')
+  async getPaymentDetail(
+    @Res() res: Response,
+    @Param('paymentId') paymentId: number,
+  ) {
+    const payment = await this.paymentService.getPaymentDetail(paymentId);
+
+    this.responseService.success(res, '결제 정보 상세 조회 성공', payment);
+  }
 
   /* 수강료 지불 */
   @Post()
