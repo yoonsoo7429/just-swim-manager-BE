@@ -51,11 +51,16 @@ export class PaymentRepository {
 
   /* 전체 결제 정보 조회 */
   async findAllPayments(): Promise<Payment[]> {
-    return await this.paymentRepository.find();
+    return await this.paymentRepository.find({
+      relations: ['customer', 'lecture'],
+    });
   }
 
   /* 결제 상세 정보 조회 */
   async findPaymentDetail(paymentId: number): Promise<Payment> {
-    return await this.paymentRepository.findOne({ where: { paymentId } });
+    return await this.paymentRepository.findOne({
+      where: { paymentId },
+      relations: ['customer', 'lecture'],
+    });
   }
 }
