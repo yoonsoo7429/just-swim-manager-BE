@@ -9,7 +9,10 @@ export class PaymentService {
   constructor(private readonly paymentRepository: PaymentRepository) {}
 
   /* 전체 조회 */
-  async getAllPayments(): Promise<Payment[]> {
+  async getAllPayments(lectureId?: number): Promise<Payment[]> {
+    if (lectureId) {
+      return await this.paymentRepository.findPaymentsByLectureId(lectureId);
+    }
     return await this.paymentRepository.findAllPayments();
   }
 

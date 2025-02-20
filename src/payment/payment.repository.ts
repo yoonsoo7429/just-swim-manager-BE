@@ -56,6 +56,13 @@ export class PaymentRepository {
     });
   }
 
+  /* 전체 결제 정보 조회 */
+  async findPaymentsByLectureId(lectureId: number): Promise<Payment[]> {
+    return await this.paymentRepository.find({
+      where: { lecture: { lectureId } },
+    });
+  }
+
   /* 결제 상세 정보 조회 */
   async findPaymentDetail(paymentId: number): Promise<Payment> {
     return await this.paymentRepository.findOne({

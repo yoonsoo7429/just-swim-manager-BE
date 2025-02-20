@@ -87,7 +87,7 @@ export class CustomerRepository {
   async findCustomerDetail(customerId: number): Promise<Customer> {
     return await this.customerRepository.findOne({
       where: { customerId },
-      relations: ['member', 'payment', 'payment.lecture'],
+      relations: ['member', 'member.lecture', 'payment', 'payment.lecture'],
     });
   }
 

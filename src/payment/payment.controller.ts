@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Res,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
@@ -23,8 +24,11 @@ export class PaymentController {
 
   /* 전체 조회 */
   @Get()
-  async getAllPayments(@Res() res: Response) {
-    const payments = await this.paymentService.getAllPayments();
+  async getAllPayments(
+    @Res() res: Response,
+    @Query('lectureId') lectureId?: number,
+  ) {
+    const payments = await this.paymentService.getAllPayments(lectureId);
 
     this.responseService.success(res, '결제 정보 전체 조회 성공', payments);
   }
