@@ -90,6 +90,7 @@ export class CustomerService {
               paymentId: payment.paymentId,
               paymentFee: payment.paymentFee,
               paymentDate: payment.paymentDate,
+              paymentCreatedAt: payment.paymentCreatedAt,
               paymentDeletedAt: payment.paymentDeletedAt,
             }))
           : [],
