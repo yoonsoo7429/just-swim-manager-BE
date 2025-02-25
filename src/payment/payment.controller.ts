@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -26,7 +27,7 @@ export class PaymentController {
   @Get()
   async getAllPayments(
     @Res() res: Response,
-    @Query('lectureId') lectureId?: number,
+    @Query('lectureId', ParseIntPipe) lectureId?: number,
   ) {
     const payments = await this.paymentService.getAllPayments(lectureId);
 
@@ -37,7 +38,7 @@ export class PaymentController {
   @Get(':paymentId')
   async getPaymentDetail(
     @Res() res: Response,
-    @Param('paymentId') paymentId: number,
+    @Param('paymentId', ParseIntPipe) paymentId: number,
   ) {
     const payment = await this.paymentService.getPaymentDetail(paymentId);
 
@@ -59,7 +60,7 @@ export class PaymentController {
   @Patch(':paymentId')
   async updateMember(
     @Res() res: Response,
-    @Param('paymentId') paymentId: number,
+    @Param('paymentId', ParseIntPipe) paymentId: number,
     @Body() editPaymentDto: EditPaymentDto,
   ) {
     await this.paymentService.updatePayment(paymentId, editPaymentDto);
@@ -70,7 +71,7 @@ export class PaymentController {
   @Delete(':paymentId')
   async softDeleteMember(
     @Res() res: Response,
-    @Param('paymentId') paymentId: number,
+    @Param('paymentId', ParseIntPipe) paymentId: number,
   ) {
     await this.paymentService.softDeletePayment(paymentId);
     this.responseService.success(res, '수강료 환불 성공');

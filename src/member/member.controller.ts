@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Res,
@@ -34,7 +35,7 @@ export class MemberController {
   @Patch(':memberId')
   async updateMember(
     @Res() res: Response,
-    @Param('memberId') memberId: number,
+    @Param('memberId', ParseIntPipe) memberId: number,
     @Body() editMemberDto: EditMemberDto,
   ) {
     await this.memberService.editMember(memberId, editMemberDto);
@@ -45,7 +46,7 @@ export class MemberController {
   @Delete(':memberId')
   async softDeleteMember(
     @Res() res: Response,
-    @Param('memberId') memberId: number,
+    @Param('memberId', ParseIntPipe) memberId: number,
   ) {
     await this.memberService.softDeleteMember(memberId);
     this.responseService.success(res, '수강생 수강 취소 성공');

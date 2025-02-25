@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Res,
@@ -43,7 +44,7 @@ export class CustomerController {
   @Get(':customerId')
   async getCustomerDetail(
     @Res() res: Response,
-    @Param('customerId') customerId: number,
+    @Param('customerId', ParseIntPipe) customerId: number,
   ) {
     const customer = await this.customerService.getCustomerDetail(customerId);
     this.responseService.success(res, '회원 조회 성공', customer);
@@ -53,7 +54,7 @@ export class CustomerController {
   @Patch(':customerId')
   async updateCustomer(
     @Res() res: Response,
-    @Param('customerId') customerId: number,
+    @Param('customerId', ParseIntPipe) customerId: number,
     @Body() editCustomerDto: EditCustomerDto,
   ) {
     await this.customerService.updateCustomer(customerId, editCustomerDto);
@@ -65,7 +66,7 @@ export class CustomerController {
   @Delete(':customerId')
   async softDeleteCustomer(
     @Res() res: Response,
-    @Param('customerId') customerId: number,
+    @Param('customerId', ParseIntPipe) customerId: number,
   ) {
     await this.customerService.softDeleteCustomer(customerId);
 

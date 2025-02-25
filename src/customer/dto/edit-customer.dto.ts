@@ -1,24 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { CustomerGender } from '../enum/customer-gender.enum';
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateCustomerDto } from './create-customer.dto';
 
-export class EditCustomerDto {
-  @IsOptional()
-  @IsString()
-  readonly name?: string;
-
-  @IsOptional()
-  @IsEnum(CustomerGender)
-  gender?: CustomerGender;
-
-  @IsOptional()
-  @IsString()
-  phoneNumber?: string;
-
-  @IsOptional()
-  @IsString()
-  birthDate?: string;
-
-  @IsOptional()
-  @IsString()
-  address?: string;
-}
+export class EditCustomerDto extends PartialType(CreateCustomerDto) {}

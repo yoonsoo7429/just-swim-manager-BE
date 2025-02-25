@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Res,
@@ -44,7 +45,7 @@ export class LectureController {
   @Get(':lectureId')
   async getLectureDetail(
     @Res() res: Response,
-    @Param('lectureId') lectureId: number,
+    @Param('lectureId', ParseIntPipe) lectureId: number,
   ) {
     const lecture = await this.lectureService.getLectureDetail(lectureId);
 
@@ -55,7 +56,7 @@ export class LectureController {
   @Patch(':lectureId')
   async editLecute(
     @Res() res: Response,
-    @Param('lectureId') lectureId: number,
+    @Param('lectureId', ParseIntPipe) lectureId: number,
     @Body() editLectureDto: EditLectureDto,
   ) {
     await this.lectureService.editLecute(lectureId, editLectureDto);
@@ -67,7 +68,7 @@ export class LectureController {
   @Delete(':lectureId')
   async softDeleteLecture(
     @Res() res: Response,
-    @Param('lectureId') lectureId: number,
+    @Param('lectureId', ParseIntPipe) lectureId: number,
   ) {
     await this.lectureService.softDeleteLecture(lectureId);
 
