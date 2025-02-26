@@ -19,13 +19,11 @@ export class MemberService {
   async createMember(createMemberDto: CreateMemberDto): Promise<Member> {
     const newMember = await this.memberRepository.createMember(createMemberDto);
 
-    const today = moment().format('YYYY.MM.DD');
-
     const createPaymentDto: CreatePaymentDto = {
       customerId: newMember.customer.customerId,
       lectureId: newMember.lecture.lectureId,
       paymentFee: '0',
-      paymentDate: today,
+      paymentDate: null,
     };
 
     await this.paymentRepository.createPayment(createPaymentDto);

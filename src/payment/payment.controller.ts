@@ -25,11 +25,8 @@ export class PaymentController {
 
   /* 전체 조회 */
   @Get()
-  async getAllPayments(
-    @Res() res: Response,
-    @Query('lectureId', ParseIntPipe) lectureId?: number,
-  ) {
-    const payments = await this.paymentService.getAllPayments(lectureId);
+  async getAllPayments(@Res() res: Response) {
+    const payments = await this.paymentService.getAllPayments();
 
     this.responseService.success(res, '결제 정보 전체 조회 성공', payments);
   }

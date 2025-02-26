@@ -27,7 +27,7 @@ export class Payment {
   @Column('varchar')
   paymentFee: string;
 
-  @Column('varchar')
+  @Column('varchar', { nullable: true })
   paymentDate: string;
 
   @CreateDateColumn({ type: 'timestamp' })
