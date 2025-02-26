@@ -1,3 +1,4 @@
+import * as Joi from 'joi';
 import {
   MiddlewareConsumer,
   Module,
@@ -20,7 +21,18 @@ import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validationSchema: Joi.object({
+        ENV: Joi.string().valid('dev', 'prod').required(),
+        DB_TYPE: Joi.string().valid('mysql').required(),
+        DB_HOST: Joi.string().required(),
+        DB_DATABASE: Joi.string().required(),
+        DB_PORT: Joi.number().required(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+      }),
+    }),
     // db 설정
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
