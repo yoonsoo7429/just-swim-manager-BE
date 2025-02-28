@@ -15,6 +15,15 @@ export class MemberService {
     private readonly paymentRepository: PaymentRepository,
   ) {}
 
+  /* 수강생 정보 불러오기 */
+  async findAllMembers(lectureId?: number): Promise<Member[]> {
+    if (lectureId) {
+      const allMembersByLectureId =
+        await this.memberRepository.findAllMembersByLectureId(lectureId);
+      return allMembersByLectureId;
+    }
+  }
+
   /* 수강생 등록 */
   async createMember(createMemberDto: CreateMemberDto): Promise<Member> {
     const newMember = await this.memberRepository.createMember(createMemberDto);

@@ -11,6 +11,13 @@ export class MemberRepository {
     @InjectRepository(Member) private memberRepository: Repository<Member>,
   ) {}
 
+  /* 수강생 정보 불러오기 lectureId를 이용해서 */
+  async findAllMembersByLectureId(lectureId: number): Promise<Member[]> {
+    return await this.memberRepository.find({
+      where: { lecture: { lectureId } },
+    });
+  }
+
   /* 수강생 등록 */
   async createMember(createMemberDto: CreateMemberDto): Promise<Member> {
     const { customerId, lectureId, memberRegistrationDate } = createMemberDto;

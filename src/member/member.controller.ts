@@ -2,10 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Res,
 } from '@nestjs/common';
 import { MemberService } from './member.service';
@@ -20,6 +22,18 @@ export class MemberController {
     private readonly memberService: MemberService,
     private readonly responseService: ResponseService,
   ) {}
+
+  /* 수강생 정보 조회하기기 */
+  @Get()
+  async getAllMembers(
+    @Res() res: Response,
+    @Query('lectureId') lectureId?: string,
+  ) {
+    const allMembers = await this.memberService.findAllMembers(
+      parseInt(lectureId),
+    );
+    this.responseService.success(res, '수강생들 정보 조회 성공', allMembers);
+  }
 
   /* 수강생 등록 */
   @Post()
