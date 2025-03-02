@@ -15,6 +15,7 @@ export class MemberRepository {
   async findAllMembersByLectureId(lectureId: number): Promise<Member[]> {
     return await this.memberRepository.find({
       where: { lecture: { lectureId } },
+      relations: ['customer'],
     });
   }
 
