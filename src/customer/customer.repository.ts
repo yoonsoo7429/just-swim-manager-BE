@@ -67,20 +67,14 @@ export class CustomerRepository {
   async createCustomer(
     createCustomerDto: CreateCustomerDto,
   ): Promise<Customer> {
-    const { name, gender, phoneNumber, birthDate, address } = createCustomerDto;
-    const newCustomer = this.customerRepository.create({
-      name,
-      gender,
-      phoneNumber,
-      birthDate,
-      address,
-    });
-    return await this.customerRepository.save(newCustomer);
+    return await this.customerRepository.save(createCustomerDto);
   }
 
   /* 전체 회원 조회 */
   async findAllCustomers(): Promise<Customer[]> {
-    return await this.customerRepository.find();
+    return await this.customerRepository.find({
+      order: { customerCreatedAt: 'DESC' },
+    });
   }
 
   /* 회원 상세 조회 */
@@ -96,11 +90,7 @@ export class CustomerRepository {
     customerId: number,
     editCustomerDto: EditCustomerDto,
   ): Promise<void> {
-    const { name, gender, phoneNumber, birthDate, address } = editCustomerDto;
-    await this.customerRepository.update(
-      { customerId },
-      { name, gender, phoneNumber, birthDate, address },
-    );
+    await this.customerRepository.update({ customerId }, editCustomerDto);
   }
 
   /* 회원 정보 삭제 (soft delete) */

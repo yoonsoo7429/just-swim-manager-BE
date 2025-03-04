@@ -1,5 +1,6 @@
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { CustomerGender } from '../enum/customer-gender.enum';
+import { CustomerProgress } from '../enum/customer-progress.enum';
 
 export class CreateCustomerDto {
   @IsNotEmpty()
@@ -21,4 +22,8 @@ export class CreateCustomerDto {
   @IsNotEmpty()
   @IsString()
   address: string;
+
+  @IsNotEmpty()
+  @IsEnum(CustomerProgress)
+  progress: CustomerProgress;
 }

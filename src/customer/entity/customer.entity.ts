@@ -10,6 +10,7 @@ import {
 import { CustomerGender } from '../enum/customer-gender.enum';
 import { Member } from 'src/member/entity/member.entity';
 import { Payment } from 'src/payment/entity/payment.entity';
+import { CustomerProgress } from '../enum/customer-progress.enum';
 
 @Entity('customer')
 export class Customer {
@@ -30,6 +31,9 @@ export class Customer {
 
   @Column({ type: 'varchar' })
   address: string;
+
+  @Column({ type: 'enum', enum: CustomerProgress, nullable: true })
+  progress: CustomerProgress;
 
   @CreateDateColumn({ type: 'timestamp' })
   customerCreatedAt: Date;

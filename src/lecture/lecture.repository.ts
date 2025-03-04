@@ -14,24 +14,7 @@ export class LectureRepository {
 
   /* 수업 등록 */
   async createLecture(createLectureDto: CreateLectureDto): Promise<Lecture> {
-    const {
-      lectureTitle,
-      lectureLevel,
-      lectureDays,
-      lectureTime,
-      lectureFee,
-      lectureCapacity,
-    } = createLectureDto;
-    const newLecture = this.lectureRepository.create({
-      lectureTitle,
-      lectureLevel,
-      lectureDays,
-      lectureTime,
-      lectureFee,
-      lectureCapacity,
-    });
-    await this.lectureRepository.save(newLecture);
-    return newLecture;
+    return await this.lectureRepository.save(createLectureDto);
   }
 
   /* 수업 전체 조회 */
@@ -52,25 +35,7 @@ export class LectureRepository {
     lectureId: number,
     editLectureDto: EditLectureDto,
   ): Promise<UpdateResult> {
-    const {
-      lectureTitle,
-      lectureLevel,
-      lectureDays,
-      lectureTime,
-      lectureFee,
-      lectureCapacity,
-    } = editLectureDto;
-    return await this.lectureRepository.update(
-      { lectureId },
-      {
-        lectureTitle,
-        lectureLevel,
-        lectureDays,
-        lectureTime,
-        lectureFee,
-        lectureCapacity,
-      },
-    );
+    return await this.lectureRepository.update({ lectureId }, editLectureDto);
   }
 
   /* 수업 삭제 (soft delete) */
