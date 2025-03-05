@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AdminSigninDto } from './dto/admin-signin.dto';
 import { ResponseService } from 'src/common/reponse/reponse.service';
 import { Response } from 'express';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { UserSigninDto } from './dto/user-signin.dto';
 
 @Controller()
 export class AuthController {
@@ -11,14 +12,17 @@ export class AuthController {
     private readonly responseService: ResponseService,
   ) {}
 
-  /* 관리자 signin */
-  @Post('signin')
-  adminSignin(@Res() res: Response, @Body() adminSigninDto: AdminSigninDto) {
-    // 관리자 인증
-    this.authService.validateAdmin(adminSigninDto);
+  /*signup */
+  @Post('signup')
+  async signup(@Res() res: Response, @Body() createUserDto: CreateUserDto) {
+    await this.authService.signup(createUserDto);
+    this.responseService.success(res, '회원 가입 성공');
+  }
 
-    // JWT 생성
-    const token = this.authService.generateJwtToken({ id: adminSigninDto.id });
+  /* signin */
+  @Post('signin')
+  async signin(@Res() res: Response, @Body() userSigninDto: UserSigninDto) {
+    const token = await this.authService.signin(userSigninDto);
 
     // HTTP-only 쿠키에 JWT 저장
     res.cookie('authorization', token, {
@@ -29,7 +33,7 @@ export class AuthController {
     this.responseService.success(res, 'signin 성공', token);
   }
 
-  /* 관리자 logout */
+  /* logout */
   @Post('logout')
   adminLogout(@Res() res: Response) {
     // 쿠키 삭제
@@ -40,7 +44,8 @@ export class AuthController {
   /* Dashboard 정보 전달 */
   @Get('dashboard')
   async getDashboardInfo(@Res() res: Response) {
-    const dashboardInfo = await this.authService.findDashboardInfo();
+    const { userId } = res.locals.user;
+    const dashboardInfo = await this.authService.findDashboardInfo(userId);
 
     this.responseService.success(
       res,

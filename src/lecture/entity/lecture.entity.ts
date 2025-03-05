@@ -3,6 +3,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,11 +12,16 @@ import {
 import { LectureLevel } from '../enum/lecture-level.enum';
 import { Member } from 'src/member/entity/member.entity';
 import { Payment } from 'src/payment/entity/payment.entity';
+import { User } from 'src/user/entity/user.entity';
 
 @Entity('lecture')
 export class Lecture {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   lectureId: number;
+
+  @ManyToOne(() => User, (user) => user.lecture)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @Column({ type: 'varchar' })
   lectureTitle: string;

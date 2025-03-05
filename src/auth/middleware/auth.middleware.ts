@@ -6,10 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction, Request, Response } from 'express';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthMiddleWare implements NestMiddleware<Request, Response> {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UserService,
+  ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
     try {
@@ -30,16 +34,17 @@ export class AuthMiddleWare implements NestMiddleware<Request, Response> {
         throw new UnauthorizedException('잘못된 쿠키 형식입니다.');
       }
 
-      const decoded = this.jwtService.verify(tokenValue, {
+      const { userId } = this.jwtService.verify(tokenValue, {
         secret: process.env.JWT_SECRET,
       });
+      const user = await this.userService.findUserByPk(userId);
 
-      if (decoded) {
-        res.locals.user = decoded;
-        (req as any).user = decoded;
+      if (user) {
+        res.locals.user = user;
+        (req as any).user = user;
         next();
       } else {
-        throw new NotFoundException('관리자 정보가 없습니다.');
+        throw new NotFoundException('사용자자 정보가 없습니다.');
       }
     } catch (error) {
       res.clearCookie('authorization');

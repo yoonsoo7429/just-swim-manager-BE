@@ -5,12 +5,14 @@ import { JwtService } from '@nestjs/jwt';
 import { CustomerModule } from 'src/customer/customer.module';
 import { LectureModule } from 'src/lecture/lecture.module';
 import { PaymentModule } from 'src/payment/payment.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     forwardRef(() => CustomerModule),
     forwardRef(() => LectureModule),
     forwardRef(() => PaymentModule),
+    forwardRef(() => UserModule),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService],

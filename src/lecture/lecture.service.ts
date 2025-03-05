@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { LectureRepository } from './lecture.repository';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { Lecture } from './entity/lecture.entity';
@@ -9,30 +13,61 @@ export class LectureService {
   constructor(private readonly lectureRepository: LectureRepository) {}
 
   /* 수업 등록 */
-  async createLecture(createLectureDto: CreateLectureDto): Promise<Lecture> {
-    return this.lectureRepository.createLecture(createLectureDto);
+  async createLecture(
+    userId: number,
+    createLectureDto: CreateLectureDto,
+  ): Promise<Lecture> {
+    return this.lectureRepository.createLecture(userId, createLectureDto);
   }
 
   /* 수업 전체 조회 */
-  async getAllLectures(): Promise<Lecture[]> {
-    return await this.lectureRepository.findAllLectures();
+  async getAllLectures(userId: number): Promise<Lecture[]> {
+    return await this.lectureRepository.findAllLectures(userId);
   }
 
   /* 수업 상세 조회 */
-  async getLectureDetail(lectureId: number): Promise<Lecture> {
-    return await this.lectureRepository.findLectureDetail(lectureId);
+  async getLectureDetail(userId: number, lectureId: number): Promise<Lecture> {
+    const lecture = await this.lectureRepository.findLectureDetail(
+      userId,
+      lectureId,
+    );
+
+    if (!lecture) {
+      throw new NotFoundException('조회된 강의 정보가 없습니다.');
+    }
+
+    return lecture;
   }
 
   /* 수업 수정 */
-  async editLecute(
+  async editLecture(
+    userId: number,
     lectureId: number,
     editLectureDto: EditLectureDto,
   ): Promise<void> {
-    await this.lectureRepository.editLecute(lectureId, editLectureDto);
+    const lecture = await this.lectureRepository.findLectureDetail(
+      userId,
+      lectureId,
+    );
+
+    if (!lecture) {
+      throw new UnauthorizedException('수업 수정 권한이 없습니다.');
+    }
+
+    await this.lectureRepository.editLecture(lectureId, editLectureDto);
   }
 
   /* 수업 삭제 (soft delete) */
-  async softDeleteLecture(lectureId: number): Promise<void> {
+  async softDeleteLecture(userId: number, lectureId: number): Promise<void> {
+    const lecture = await this.lectureRepository.findLectureDetail(
+      userId,
+      lectureId,
+    );
+
+    if (!lecture) {
+      throw new UnauthorizedException('수업 수정 권한이 없습니다.');
+    }
+
     await this.lectureRepository.softDeleteLecture(lectureId);
   }
 }

@@ -18,6 +18,7 @@ import { AuthMiddleWare } from './auth/middleware/auth.middleware';
 import { LectureModule } from './lecture/lecture.module';
 import { MemberModule } from './member/member.module';
 import { PaymentModule } from './payment/payment.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -44,8 +45,8 @@ import { PaymentModule } from './payment/payment.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        // synchronize: true,
-        synchronize: false,
+        synchronize: true,
+        // synchronize: false,
       }),
       inject: [ConfigService],
     }),
@@ -56,6 +57,7 @@ import { PaymentModule } from './payment/payment.module';
     LectureModule,
     MemberModule,
     PaymentModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -65,7 +67,10 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleWare)
-      .exclude({ path: 'signin', method: RequestMethod.POST })
+      .exclude(
+        { path: 'signin', method: RequestMethod.POST },
+        { path: 'signup', method: RequestMethod.POST },
+      )
       .forRoutes({
         path: '*',
         method: RequestMethod.ALL,

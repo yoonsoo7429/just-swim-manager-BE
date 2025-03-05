@@ -28,7 +28,11 @@ export class LectureController {
     @Res() res: Response,
     @Body() createLectureDto: CreateLectureDto,
   ) {
-    const lecture = await this.lectureService.createLecture(createLectureDto);
+    const { userId } = res.locals.user;
+    const lecture = await this.lectureService.createLecture(
+      userId,
+      createLectureDto,
+    );
 
     this.responseService.success(res, '수업 등록 성공', lecture);
   }
@@ -36,7 +40,8 @@ export class LectureController {
   /* 수업 전체 조회 */
   @Get()
   async getAllLectures(@Res() res: Response) {
-    const lectures = await this.lectureService.getAllLectures();
+    const { userId } = res.locals.user;
+    const lectures = await this.lectureService.getAllLectures(userId);
 
     this.responseService.success(res, '수업 전체 조회 성공', lectures);
   }
@@ -47,7 +52,11 @@ export class LectureController {
     @Res() res: Response,
     @Param('lectureId', ParseIntPipe) lectureId: number,
   ) {
-    const lecture = await this.lectureService.getLectureDetail(lectureId);
+    const { userId } = res.locals.user;
+    const lecture = await this.lectureService.getLectureDetail(
+      userId,
+      lectureId,
+    );
 
     this.responseService.success(res, '수업 조회 성공', lecture);
   }
@@ -59,7 +68,9 @@ export class LectureController {
     @Param('lectureId', ParseIntPipe) lectureId: number,
     @Body() editLectureDto: EditLectureDto,
   ) {
-    await this.lectureService.editLecute(lectureId, editLectureDto);
+    const { userId } = res.locals.user;
+
+    await this.lectureService.editLecture(userId, lectureId, editLectureDto);
 
     this.responseService.success(res, '수업 수정 성공');
   }
@@ -70,7 +81,9 @@ export class LectureController {
     @Res() res: Response,
     @Param('lectureId', ParseIntPipe) lectureId: number,
   ) {
-    await this.lectureService.softDeleteLecture(lectureId);
+    const { userId } = res.locals.user;
+
+    await this.lectureService.softDeleteLecture(userId, lectureId);
 
     this.responseService.success(res, '수업 삭제 성공');
   }

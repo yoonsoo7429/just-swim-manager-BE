@@ -13,25 +13,34 @@ export class LectureRepository {
   ) {}
 
   /* 수업 등록 */
-  async createLecture(createLectureDto: CreateLectureDto): Promise<Lecture> {
-    return await this.lectureRepository.save(createLectureDto);
+  async createLecture(
+    userId: number,
+    createLectureDto: CreateLectureDto,
+  ): Promise<Lecture> {
+    return await this.lectureRepository.save({
+      user: { userId },
+      ...createLectureDto,
+    });
   }
 
   /* 수업 전체 조회 */
-  async findAllLectures(): Promise<Lecture[]> {
-    return await this.lectureRepository.find({ relations: ['member'] });
+  async findAllLectures(userId: number): Promise<Lecture[]> {
+    return await this.lectureRepository.find({
+      where: { user: { userId } },
+      relations: ['member'],
+    });
   }
 
   /* 수업 상세 조회 */
-  async findLectureDetail(lectureId: number): Promise<Lecture> {
+  async findLectureDetail(userId: number, lectureId: number): Promise<Lecture> {
     return await this.lectureRepository.findOne({
-      where: { lectureId },
+      where: { user: { userId }, lectureId },
       relations: ['member', 'member.customer'],
     });
   }
 
   /* 수업 수정 */
-  async editLecute(
+  async editLecture(
     lectureId: number,
     editLectureDto: EditLectureDto,
   ): Promise<UpdateResult> {
