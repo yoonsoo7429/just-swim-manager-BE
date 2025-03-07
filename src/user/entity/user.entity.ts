@@ -12,6 +12,8 @@ import { UserType } from '../enum/user-type.enum';
 import { Customer } from 'src/customer/entity/customer.entity';
 import { Instructor } from 'src/instructor/entity/instructor.entity';
 import { UserGender } from '../enum/user-gender.enum';
+import { Member } from 'src/member/entity/member.entity';
+import { Payment } from 'src/payment/entity/payment.entity';
 
 @Entity('user')
 export class User {
@@ -59,4 +61,10 @@ export class User {
 
   @OneToMany(() => Lecture, (lecture) => lecture.user)
   lecture: Lecture[];
+
+  @OneToMany(() => Member, (member) => member.user)
+  member: Member[];
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payment: Payment[];
 }

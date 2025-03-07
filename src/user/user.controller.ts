@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Patch,
@@ -17,6 +18,16 @@ export class UserController {
     private readonly userService: UserService,
     private readonly responseService: ResponseService,
   ) {}
+  /* 프로필 정보 */
+  @Get()
+  async getUserDetail(@Res() res: Response) {
+    const { userId } = res.locals.user;
+
+    const userInfo = await this.userService.findUserByPk(userId);
+
+    this.responseService.success(res, '프로필 조회 성공', userInfo);
+  }
+
   /* user 정보 수정 */
   @Patch()
   async editUser(@Res() res: Response, @Body() editUserDto: EditUserDto) {
@@ -24,6 +35,6 @@ export class UserController {
 
     await this.userService.editUser(userId, editUserDto);
 
-    this.responseService.success(res, '클라이언트 정보 수정 성공');
+    this.responseService.success(res, '프로필 정보 수정 성공');
   }
 }

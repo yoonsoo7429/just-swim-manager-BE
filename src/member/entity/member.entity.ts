@@ -1,5 +1,6 @@
 import { Customer } from 'src/customer/entity/customer.entity';
 import { Lecture } from 'src/lecture/entity/lecture.entity';
+import { User } from 'src/user/entity/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -16,9 +17,9 @@ export class Member {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   memberId: number;
 
-  @ManyToOne(() => Customer, (customer) => customer.member)
-  @JoinColumn({ name: 'customerId' })
-  customer: Customer;
+  @ManyToOne(() => User, (user) => user.member)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @ManyToOne(() => Lecture, (lecture) => lecture.member)
   @JoinColumn({ name: 'lectureId' })

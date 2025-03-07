@@ -3,7 +3,7 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 export class CreatePaymentDto {
   @IsNotEmpty()
   @IsNumber()
-  customerId: number;
+  userId: number;
 
   @IsNotEmpty()
   @IsNumber()

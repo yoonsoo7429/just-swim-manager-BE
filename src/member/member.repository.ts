@@ -15,15 +15,15 @@ export class MemberRepository {
   async findAllMembersByLectureId(lectureId: number): Promise<Member[]> {
     return await this.memberRepository.find({
       where: { lecture: { lectureId } },
-      relations: ['customer'],
+      relations: ['user'],
     });
   }
 
   /* 수강생 등록 */
   async createMember(createMemberDto: CreateMemberDto): Promise<Member> {
-    const { customerId, lectureId, memberRegistrationDate } = createMemberDto;
+    const { userId, lectureId, memberRegistrationDate } = createMemberDto;
     const newMember = this.memberRepository.create({
-      customer: { customerId },
+      user: { userId },
       lecture: { lectureId },
       memberRegistrationDate,
     });
@@ -37,11 +37,11 @@ export class MemberRepository {
     memberId: number,
     editMemberDto: EditMemberDto,
   ): Promise<UpdateResult> {
-    const { customerId, lectureId, memberRegistrationDate } = editMemberDto;
+    const { userId, lectureId, memberRegistrationDate } = editMemberDto;
     return await this.memberRepository.update(
       { memberId },
       {
-        customer: { customerId },
+        user: { userId },
         lecture: { lectureId },
         memberRegistrationDate,
       },

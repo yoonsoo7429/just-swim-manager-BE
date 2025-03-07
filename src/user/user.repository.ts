@@ -23,7 +23,10 @@ export class UserRepository {
 
   /* pk로 조회 */
   async findUserByPk(userId: number): Promise<User> {
-    return await this.userRepository.findOne({ where: { userId } });
+    return await this.userRepository.findOne({
+      where: { userId },
+      relations: ['customer', 'instructor'],
+    });
   }
 
   /* user 정보 수정 */

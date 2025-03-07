@@ -8,8 +8,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Member } from 'src/member/entity/member.entity';
-import { Payment } from 'src/payment/entity/payment.entity';
 import { User } from 'src/user/entity/user.entity';
 
 @Entity('customer')
@@ -29,10 +27,4 @@ export class Customer {
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   customerDeletedAt: Date;
-
-  @OneToMany(() => Member, (member) => member.customer)
-  member: Member[];
-
-  @OneToMany(() => Payment, (payment) => payment.customer)
-  payment: Payment[];
 }

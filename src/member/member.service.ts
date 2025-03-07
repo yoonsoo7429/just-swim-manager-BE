@@ -29,7 +29,7 @@ export class MemberService {
     const newMember = await this.memberRepository.createMember(createMemberDto);
 
     const createPaymentDto: CreatePaymentDto = {
-      customerId: newMember.customer.customerId,
+      userId: newMember.user.userId,
       lectureId: newMember.lecture.lectureId,
       paymentFee: '0',
       paymentDate: null,

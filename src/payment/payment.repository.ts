@@ -13,9 +13,9 @@ export class PaymentRepository {
 
   /* 수강료 지불 */
   async createPayment(createPaymentDto: CreatePaymentDto): Promise<Payment> {
-    const { customerId, lectureId, paymentFee, paymentDate } = createPaymentDto;
+    const { userId, lectureId, paymentFee, paymentDate } = createPaymentDto;
     const newPayment = this.paymentRepository.create({
-      customer: { customerId },
+      user: { userId },
       lecture: { lectureId },
       paymentFee,
       paymentDate,
@@ -29,11 +29,11 @@ export class PaymentRepository {
     paymentId: number,
     editPaymentDto: EditPaymentDto,
   ): Promise<UpdateResult> {
-    const { customerId, lectureId, paymentFee, paymentDate } = editPaymentDto;
+    const { userId, lectureId, paymentFee, paymentDate } = editPaymentDto;
     return await this.paymentRepository.update(
       { paymentId },
       {
-        customer: { customerId },
+        user: { userId },
         lecture: { lectureId },
         paymentFee,
         paymentDate,
@@ -52,7 +52,7 @@ export class PaymentRepository {
   /* 전체 결제 정보 조회 */
   async findAllPayments(): Promise<Payment[]> {
     return await this.paymentRepository.find({
-      relations: ['customer', 'lecture'],
+      relations: ['user', 'lecture'],
     });
   }
 
@@ -60,7 +60,7 @@ export class PaymentRepository {
   async findPaymentDetail(paymentId: number): Promise<Payment> {
     return await this.paymentRepository.findOne({
       where: { paymentId },
-      relations: ['customer', 'lecture'],
+      relations: ['user', 'lecture'],
     });
   }
 }
