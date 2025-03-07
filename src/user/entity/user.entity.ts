@@ -8,17 +8,39 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserType } from '../enum/user-type.enum';
+import { Customer } from 'src/customer/entity/customer.entity';
+import { Instructor } from 'src/instructor/entity/instructor.entity';
+import { UserGender } from '../enum/user-gender.enum';
 
 @Entity('user')
 export class User {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   userId: number;
 
+  @Column({ type: 'varchar', nullable: true })
+  provider: string;
+
+  @Column({ type: 'enum', enum: UserType, nullable: true })
+  userType: UserType;
+
+  @Column({ type: 'enum', enum: UserGender, nullable: true })
+  gender: UserGender;
+
   @Column('varchar')
   email: string;
 
-  @Column('varchar')
-  password: string;
+  @Column({ type: 'varchar', nullable: true })
+  name: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  birth: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  phoneNumber: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  address: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   userCreatedAt: Date;
@@ -28,6 +50,12 @@ export class User {
 
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   userDeletedAt: Date;
+
+  @OneToMany(() => Customer, (customer) => customer.user)
+  customer: Customer[];
+
+  @OneToMany(() => Instructor, (instructor) => instructor.user)
+  instructor: Instructor[];
 
   @OneToMany(() => Lecture, (lecture) => lecture.user)
   lecture: Lecture[];

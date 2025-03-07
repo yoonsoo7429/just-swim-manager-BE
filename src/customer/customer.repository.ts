@@ -14,66 +14,68 @@ export class CustomerRepository {
   ) {}
 
   /* 변환된 회원 정보를 저장 */
-  async createCustomerByXlsx(customerData: any[]): Promise<Customer[]> {
-    if (!customerData || customerData.length === 0) {
-      return [];
-    }
+  // async createCustomerByXlsx(customerData: any[]): Promise<Customer[]> {
+  //   if (!customerData || customerData.length === 0) {
+  //     return [];
+  //   }
 
-    const uniquePhoneNumbers = [
-      ...new Set(customerData.map((data) => data.phoneNumber)),
-    ];
+  //   const uniquePhoneNumbers = [
+  //     ...new Set(customerData.map((data) => data.phoneNumber)),
+  //   ];
 
-    const existingCustomers = await this.customerRepository
-      .createQueryBuilder('customer')
-      .where('customer.phoneNumber IN (:...phoneNumbers)', {
-        phoneNumbers: uniquePhoneNumbers,
-      })
-      .withDeleted()
-      .getMany();
+  //   const existingCustomers = await this.customerRepository
+  //     .createQueryBuilder('customer')
+  //     .where('customer.phoneNumber IN (:...phoneNumbers)', {
+  //       phoneNumbers: uniquePhoneNumbers,
+  //     })
+  //     .withDeleted()
+  //     .getMany();
 
-    const restoredCustomers = existingCustomers.filter(
-      (customer) => customer.customerDeletedAt !== null,
-    );
+  //   const restoredCustomers = existingCustomers.filter(
+  //     (customer) => customer.customerDeletedAt !== null,
+  //   );
 
-    if (restoredCustomers.length > 0) {
-      await this.customerRepository
-        .createQueryBuilder()
-        .update(Customer)
-        .set({ customerDeletedAt: null })
-        .where('phoneNumber IN (:...phoneNumbers)', {
-          phoneNumbers: restoredCustomers.map((c) => c.phoneNumber),
-        })
-        .execute();
-    }
+  //   if (restoredCustomers.length > 0) {
+  //     await this.customerRepository
+  //       .createQueryBuilder()
+  //       .update(Customer)
+  //       .set({ customerDeletedAt: null })
+  //       .where('phoneNumber IN (:...phoneNumbers)', {
+  //         phoneNumbers: restoredCustomers.map((c) => c.phoneNumber),
+  //       })
+  //       .execute();
+  //   }
 
-    const existingPhoneNumbers = new Set(
-      existingCustomers.map((c) => c.phoneNumber),
-    );
+  //   const existingPhoneNumbers = new Set(
+  //     existingCustomers.map((c) => c.phoneNumber),
+  //   );
 
-    const newCustomers = customerData.filter(
-      (data) => !existingPhoneNumbers.has(data.phoneNumber),
-    );
+  //   const newCustomers = customerData.filter(
+  //     (data) => !existingPhoneNumbers.has(data.phoneNumber),
+  //   );
 
-    if (newCustomers.length === 0) {
-      return restoredCustomers;
-    }
+  //   if (newCustomers.length === 0) {
+  //     return restoredCustomers;
+  //   }
 
-    const savedNewCustomers = await this.customerRepository.save(newCustomers);
+  //   const savedNewCustomers = await this.customerRepository.save(newCustomers);
 
-    return [...restoredCustomers, ...savedNewCustomers];
-  }
+  //   return [...restoredCustomers, ...savedNewCustomers];
+  // }
 
   /* 회원 등록 */
   async createCustomer(
-    createCustomerDto: CreateCustomerDto,
+    userId: number,
+    // createCustomerDto: CreateCustomerDto,
   ): Promise<Customer> {
-    return await this.customerRepository.save(createCustomerDto);
+    return await this.customerRepository.save({ user: { userId } });
   }
 
   /* 전체 회원 조회 */
   async findAllCustomers(): Promise<Customer[]> {
     return await this.customerRepository.find({
       order: { customerCreatedAt: 'DESC' },
+      relations: ['user'],
     });
   }
 

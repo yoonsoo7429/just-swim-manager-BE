@@ -22,17 +22,6 @@ export class CustomerController {
     private readonly responseService: ResponseService,
   ) {}
 
-  /* 회원 등록 */
-  @Post()
-  async createCustomer(
-    @Res() res: Response,
-    @Body() createCustomerDto: CreateCustomerDto,
-  ) {
-    const newCustomer =
-      await this.customerService.createCustomer(createCustomerDto);
-    this.responseService.success(res, '회원 등록 성공', newCustomer);
-  }
-
   /* 전체 회원 조회 */
   @Get()
   async getAllCustomers(@Res() res: Response) {
@@ -41,14 +30,14 @@ export class CustomerController {
   }
 
   /* 회원 상세 조회 */
-  @Get(':customerId')
-  async getCustomerDetail(
-    @Res() res: Response,
-    @Param('customerId', ParseIntPipe) customerId: number,
-  ) {
-    const customer = await this.customerService.getCustomerDetail(customerId);
-    this.responseService.success(res, '회원 조회 성공', customer);
-  }
+  // @Get(':customerId')
+  // async getCustomerDetail(
+  //   @Res() res: Response,
+  //   @Param('customerId', ParseIntPipe) customerId: number,
+  // ) {
+  //   const customer = await this.customerService.getCustomerDetail(customerId);
+  //   this.responseService.success(res, '회원 조회 성공', customer);
+  // }
 
   /* 회원 정보 수정 */
   @Patch(':customerId')

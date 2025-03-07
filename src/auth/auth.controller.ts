@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ResponseService } from 'src/common/reponse/reponse.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { UserSigninDto } from './dto/user-signin.dto';
+import { KakaoAuthGuard } from './guard/kakao.guard';
 
 @Controller()
 export class AuthController {
@@ -12,33 +21,63 @@ export class AuthController {
     private readonly responseService: ResponseService,
   ) {}
 
-  /*signup */
-  @Post('signup')
-  async signup(@Res() res: Response, @Body() createUserDto: CreateUserDto) {
-    await this.authService.signup(createUserDto);
-    this.responseService.success(res, '회원 가입 성공');
+  /* kakao 소셜 로그인 (Guard를 통해 접근) */
+  @UseGuards(KakaoAuthGuard)
+  @Get('Oauth/kakao')
+  async kakaoLogin(): Promise<void> {
+    return;
   }
 
-  /* signin */
-  @Post('signin')
-  async signin(@Res() res: Response, @Body() userSigninDto: UserSigninDto) {
-    const token = await this.authService.signin(userSigninDto);
+  @UseGuards(KakaoAuthGuard)
+  @Get('Oauth/kakao/callback')
+  async kakaoCallback(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    let profile: any = req.user;
+    let provider: string = profile.provider;
+    let name: string = profile._json.kakao_account.name;
+    let email: string = profile._json.kakao_account.email;
+    // birth
+    let birthYear: string = profile._json.kakao_account.birthyear;
+    let birthDay: string = profile._json.kakao_account.birthday;
+    let birth: string = `${birthYear}.${birthDay.substring(0, 2)}.${birthDay.substring(2)}`;
+    // phoneNumber
+    let phone_number: string = profile._json.kakao_account.phone_number;
+    let cleanedNumber: string = phone_number.replace(/\D/g, '');
+    let phoneNumber: string = `010-${cleanedNumber.substring(4, 8)}-${cleanedNumber.substring(8, 13)}`;
 
-    // HTTP-only 쿠키에 JWT 저장
-    res.cookie('authorization', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-    });
+    const exUser = await this.authService.validateUser(email, provider);
+    // user가 존재할 경우 로그인 시도
+    if (exUser) {
+      // userType을 선택하지 않았을 경우
+      if (exUser.userType === null) {
+        const token = await this.authService.generateJwtToken(exUser.userId);
+        const query = '?token=' + token;
+        res.redirect(process.env.SELECT_USERTYPE_REDIRECT_URI + `/${query}`);
+      }
+      // userType 지정되어 있을 경우 Home으로 redirect
+      if (exUser.userType !== null) {
+        const token = await this.authService.generateJwtToken(exUser.userId);
+        const query = '?token=' + token;
+        res.redirect(process.env.HOME_REDIRECT_URI + `/${query}`);
+      }
+    }
 
-    this.responseService.success(res, 'signin 성공', token);
-  }
-
-  /* logout */
-  @Post('logout')
-  adminLogout(@Res() res: Response) {
-    // 쿠키 삭제
-    res.clearCookie('authorization');
-    this.responseService.success(res, '로그아웃 성공');
+    // user가 없을 경우 새로 생성 후에 userType 지정으로 redirect
+    if (exUser === null) {
+      const newUserData: CreateUserDto = {
+        provider,
+        email,
+        name,
+        birth,
+        phoneNumber,
+      };
+      const newUser = await this.authService.createUser(newUserData);
+      const token = await this.authService.generateJwtToken(newUser.userId);
+      const query = '?token=' + token;
+      res.redirect(process.env.SELECT_USERTYPE_REDIRECT_URI + `/${query}`);
+    }
   }
 
   /* Dashboard 정보 전달 */

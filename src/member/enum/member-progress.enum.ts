@@ -1,4 +1,4 @@
-export enum CustomerProgress {
+export enum MemberProgress {
   FREE_K = '자유형K',
   FREE_S = '자유형S',
   FREE_C = '자유형C',

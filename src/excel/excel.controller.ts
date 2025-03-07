@@ -14,13 +14,13 @@ import { Response } from 'express';
 export class ExcelController {
   constructor(private readonly excelService: ExcelService) {}
 
-  @Post('upload/excel')
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadExcel(@UploadedFile() file: Express.Multer.File) {
-    const extractedData = await this.excelService.uploadExcel(file.path);
+  // @Post('upload/excel')
+  // @UseInterceptors(FileInterceptor('file'))
+  // async uploadExcel(@UploadedFile() file: Express.Multer.File) {
+  //   const extractedData = await this.excelService.uploadExcel(file.path);
 
-    return { message: '엑셀 파일 처리 완료', data: extractedData };
-  }
+  //   return { message: '엑셀 파일 처리 완료', data: extractedData };
+  // }
 
   @Get('export/excel')
   async exportExcel(@Res() res: Response) {

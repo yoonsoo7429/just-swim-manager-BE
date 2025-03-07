@@ -19,6 +19,7 @@ import { LectureModule } from './lecture/lecture.module';
 import { MemberModule } from './member/member.module';
 import { PaymentModule } from './payment/payment.module';
 import { UserModule } from './user/user.module';
+import { InstructorModule } from './instructor/instructor.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { UserModule } from './user/user.module';
     MemberModule,
     PaymentModule,
     UserModule,
+    InstructorModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -68,8 +70,8 @@ export class AppModule implements NestModule {
     consumer
       .apply(AuthMiddleWare)
       .exclude(
-        { path: 'signin', method: RequestMethod.POST },
-        { path: 'signup', method: RequestMethod.POST },
+        { path: 'Oauth/kakao', method: RequestMethod.GET },
+        { path: 'Oauth/kakao/callback', method: RequestMethod.GET },
       )
       .forRoutes({
         path: '*',

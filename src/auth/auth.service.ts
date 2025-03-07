@@ -3,7 +3,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AdminSigninDto } from './dto/admin-signin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { CustomerRepository } from 'src/customer/customer.repository';
 import { LectureRepository } from 'src/lecture/lecture.repository';
@@ -11,11 +10,9 @@ import { PaymentRepository } from 'src/payment/payment.repository';
 import { Customer } from 'src/customer/entity/customer.entity';
 import { Lecture } from 'src/lecture/entity/lecture.entity';
 import { Payment } from 'src/payment/entity/payment.entity';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { User } from 'src/user/entity/user.entity';
 import { UserRepository } from 'src/user/user.repository';
-import * as bcrypt from 'bcryptjs';
-import { UserSigninDto } from './dto/user-signin.dto';
+import { User } from 'src/user/entity/user.entity';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,54 +24,28 @@ export class AuthService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  /* 회원 가입 */
-  async signup(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    const exUser = await this.userRepository.findUserByEmail(
-      createUserDto.email,
-    );
-    if (exUser) {
-      throw new ConflictException('이미 사용 중인 이메일입니다.');
-    }
-    const user = await this.userRepository.createUser(
-      createUserDto.email,
-      hashedPassword,
-    );
-    return user;
-  }
-
-  /* 로그인 */
-  async signin(userSigninDto: UserSigninDto): Promise<string> {
-    const user = await this.userRepository.findUserByEmail(userSigninDto.email);
-
-    const isPasswordValid = await bcrypt.compare(
-      userSigninDto.password,
-      user.password,
-    );
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('비밀번호가 틀렸습니다.');
-    }
-
-    return this.jwtService.sign(
-      { userId: user.userId },
-      { secret: process.env.JWT_SECRET },
-    );
-  }
-
   /* 관리자 확인 */
-  validateAdmin(adminSigninDto: AdminSigninDto): boolean {
-    const { id, key } = adminSigninDto;
-    if (id !== process.env.ADMIN_ID || key !== process.env.ADMIN_KEY) {
-      throw new UnauthorizedException('아이디 또는 키가 잘못되었습니다.');
+  async validateUser(email: string, provider: string): Promise<User | null> {
+    const exUser = await this.userRepository.findUserByEmail(email, provider);
+    if (!exUser) {
+      return null;
     }
-    return true;
+    return exUser;
   }
 
   /* JWT 생성 */
-  generateJwtToken(payload: { id: string }): string {
-    return this.jwtService.sign(payload, {
-      secret: process.env.JWT_SECRET,
-    });
+  async generateJwtToken(userId: number): Promise<string> {
+    return this.jwtService.sign(
+      { userId },
+      {
+        secret: process.env.JWT_SECRET,
+      },
+    );
+  }
+
+  /* 고객 정보 생성 */
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    return await this.userRepository.createUser(createUserDto);
   }
 
   /* Dashboard 정보 조회 */

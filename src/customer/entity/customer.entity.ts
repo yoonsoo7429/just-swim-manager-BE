@@ -1,39 +1,25 @@
 import {
-  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { CustomerGender } from '../enum/customer-gender.enum';
 import { Member } from 'src/member/entity/member.entity';
 import { Payment } from 'src/payment/entity/payment.entity';
-import { CustomerProgress } from '../enum/customer-progress.enum';
+import { User } from 'src/user/entity/user.entity';
 
 @Entity('customer')
 export class Customer {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   customerId: number;
 
-  @Column({ type: 'varchar' })
-  name: string;
-
-  @Column({ type: 'enum', enum: CustomerGender, nullable: true })
-  gender: CustomerGender;
-
-  @Column({ type: 'varchar' })
-  phoneNumber: string;
-
-  @Column({ type: 'varchar' })
-  birthDate: string;
-
-  @Column({ type: 'varchar' })
-  address: string;
-
-  @Column({ type: 'enum', enum: CustomerProgress, nullable: true })
-  progress: CustomerProgress;
+  @ManyToOne(() => User, (user) => user.customer)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @CreateDateColumn({ type: 'timestamp' })
   customerCreatedAt: Date;
