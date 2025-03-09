@@ -22,6 +22,7 @@ export class AuthMiddleWare implements NestMiddleware<Request, Response> {
       const authorization = authorizationCookies
         ? `Bearer ` + authorizationCookies
         : authorizationHeaders;
+
       // Cookie가 존재하지 않을 경우
       if (!authorization) {
         throw new UnauthorizedException('로그인이 필요한 기능입니다.');

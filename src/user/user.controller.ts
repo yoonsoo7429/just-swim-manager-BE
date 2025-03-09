@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Patch, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ResponseService } from 'src/common/reponse/reponse.service';
 import { Response } from 'express';
