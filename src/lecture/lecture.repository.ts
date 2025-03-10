@@ -51,7 +51,7 @@ export class LectureRepository {
   async softDeleteLecture(lectureId: number): Promise<UpdateResult> {
     return await this.lectureRepository.update(
       { lectureId },
-      { lectureDeletedAt: new Date() },
+      { deletedAt: new Date() },
     );
   }
 }

@@ -1,19 +1,16 @@
-import { Customer } from 'src/customer/entity/customer.entity';
+import { BaseTable } from 'src/common/entity/base-table.entity';
 import { Lecture } from 'src/lecture/entity/lecture.entity';
 import { User } from 'src/user/entity/user.entity';
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('member')
-export class Member {
+export class Member extends BaseTable {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   memberId: number;
 
@@ -27,13 +24,4 @@ export class Member {
 
   @Column('varchar')
   memberRegistrationDate: string;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  memberCreatedAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  memberUpdatedAt: Date;
-
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  memberDeletedAt: Date;
 }

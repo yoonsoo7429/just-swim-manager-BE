@@ -52,7 +52,7 @@ export class MemberRepository {
   async softDeleteMember(memberId: number): Promise<UpdateResult> {
     return await this.memberRepository.update(
       { memberId },
-      { memberDeletedAt: new Date() },
+      { deletedAt: new Date() },
     );
   }
 }

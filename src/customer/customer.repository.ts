@@ -74,7 +74,7 @@ export class CustomerRepository {
   /* 전체 회원 조회 */
   async findAllCustomers(): Promise<Customer[]> {
     return await this.customerRepository.find({
-      order: { customerCreatedAt: 'DESC' },
+      order: { createdAt: 'DESC' },
       relations: ['user'],
     });
   }
@@ -98,16 +98,12 @@ export class CustomerRepository {
   /* 회원 정보 삭제 (soft delete) */
   async softDeleteCustomer(customerId: number): Promise<void> {
     await this.customerRepository.manager.transaction(async (manager) => {
-      await manager.update(
-        Customer,
-        { customerId },
-        { customerDeletedAt: new Date() },
-      );
+      await manager.update(Customer, { customerId }, { deletedAt: new Date() });
 
       await manager.update(
         Member,
         { customer: { customerId } },
-        { memberDeletedAt: new Date() },
+        { deletedAt: new Date() },
       );
     });
   }

@@ -45,7 +45,7 @@ export class PaymentRepository {
   async softDeletePayment(paymentId: number): Promise<UpdateResult> {
     return await this.paymentRepository.update(
       { paymentId },
-      { paymentDeletedAt: new Date() },
+      { deletedAt: new Date() },
     );
   }
 

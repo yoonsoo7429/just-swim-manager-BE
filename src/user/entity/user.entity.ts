@@ -1,22 +1,15 @@
 import { Lecture } from 'src/lecture/entity/lecture.entity';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserType } from '../enum/user-type.enum';
 import { Customer } from 'src/customer/entity/customer.entity';
 import { Instructor } from 'src/instructor/entity/instructor.entity';
 import { UserGender } from '../enum/user-gender.enum';
 import { Member } from 'src/member/entity/member.entity';
 import { Payment } from 'src/payment/entity/payment.entity';
+import { BaseTable } from 'src/common/entity/base-table.entity';
 
 @Entity('user')
-export class User {
+export class User extends BaseTable {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   userId: number;
 
@@ -43,15 +36,6 @@ export class User {
 
   @Column({ type: 'varchar', nullable: true })
   address: string;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  userCreatedAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  userUpdatedAt: Date;
-
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  userDeletedAt: Date;
 
   @OneToMany(() => Customer, (customer) => customer.user)
   customer: Customer[];

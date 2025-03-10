@@ -9,22 +9,14 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/user/entity/user.entity';
+import { BaseTable } from 'src/common/entity/base-table.entity';
 
 @Entity('customer')
-export class Customer {
+export class Customer extends BaseTable {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   customerId: number;
 
   @ManyToOne(() => User, (user) => user.customer)
   @JoinColumn({ name: 'userId' })
   user: User;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  customerCreatedAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  customerUpdatedAt: Date;
-
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  customerDeletedAt: Date;
 }

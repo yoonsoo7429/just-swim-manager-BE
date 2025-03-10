@@ -1,18 +1,15 @@
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/user/entity/user.entity';
+import { BaseTable } from 'src/common/entity/base-table.entity';
 
 @Entity('instructor')
-export class Instructor {
+export class Instructor extends BaseTable {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   instructorId: number;
 
@@ -43,13 +40,4 @@ export class Instructor {
 
   @Column({ type: 'varchar', nullable: true })
   facebookLink: string;
-
-  @CreateDateColumn({ type: 'timestamp' })
-  instructorCreatedAt: Date;
-
-  @UpdateDateColumn({ type: 'timestamp' })
-  instructorUpdatedAt: Date;
-
-  @DeleteDateColumn({ type: 'timestamp', nullable: true })
-  instructorDeletedAt: Date;
 }
