@@ -16,7 +16,10 @@ export class EditUserDto {
   address: string;
 
   @IsOptional()
-  @IsOptional()
   @IsEnum(UserType)
   userType: UserType;
+
+  @IsOptional()
+  @IsString()
+  instructorKey: string;
 }

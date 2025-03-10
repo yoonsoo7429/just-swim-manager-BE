@@ -25,6 +25,10 @@ export class UserController {
   async editUser(@Res() res: Response, @Body() editUserDto: EditUserDto) {
     const { userId } = res.locals.user;
 
+    if (editUserDto.userType) {
+      await this.userService.completeUserInfo(userId, editUserDto);
+    }
+
     await this.userService.editUser(userId, editUserDto);
 
     this.responseService.success(res, '프로필 정보 수정 성공');
