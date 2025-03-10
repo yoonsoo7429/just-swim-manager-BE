@@ -1,4 +1,20 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateMemberDto } from './create-member.dto';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { MemberProgress } from '../enum/member-progress.enum';
 
-export class EditMemberDto extends PartialType(CreateMemberDto) {}
+export class EditMemberDto {
+  @IsOptional()
+  @IsNumber()
+  userId: number;
+
+  @IsOptional()
+  @IsNumber()
+  lectureId: number;
+
+  @IsOptional()
+  @IsEnum(MemberProgress)
+  memberProgress: MemberProgress;
+
+  @IsOptional()
+  @IsString()
+  memberRegistrationDate: string;
+}

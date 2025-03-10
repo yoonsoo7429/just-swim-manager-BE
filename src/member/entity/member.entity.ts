@@ -8,6 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { MemberProgress } from '../enum/member-progress.enum';
 
 @Entity('member')
 export class Member extends BaseTable {
@@ -22,6 +23,9 @@ export class Member extends BaseTable {
   @JoinColumn({ name: 'lectureId' })
   lecture: Lecture;
 
-  @Column('varchar')
+  @Column({ type: 'enum', enum: MemberProgress })
+  memberProgress: MemberProgress;
+
+  @Column({ type: 'varchar' })
   memberRegistrationDate: string;
 }
