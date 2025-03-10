@@ -23,7 +23,7 @@ export class MemberController {
     private readonly responseService: ResponseService,
   ) {}
 
-  /* 수강생 정보 조회하기기 */
+  /* 수강생 정보 조회하기 */
   @Get()
   async getAllMembers(
     @Res() res: Response,
