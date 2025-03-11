@@ -25,14 +25,23 @@ export class MemberController {
 
   /* 수강생 정보 조회하기 */
   @Get()
-  async getAllMembers(
-    @Res() res: Response,
-    @Query('lectureId') lectureId?: string,
-  ) {
-    const allMembers = await this.memberService.findAllMembers(
-      parseInt(lectureId),
-    );
+  async getAllMembers(@Res() res: Response) {
+    const { userId } = res.locals.user;
+
+    const allMembers = await this.memberService.findAllMembers(userId);
+
     this.responseService.success(res, '수강생들 정보 조회 성공', allMembers);
+  }
+
+  /* 수강생 상세 조회 */
+  @Get(':memberId')
+  async getMemberDetail(
+    @Res() res: Response,
+    @Param('memberId') memberId: number,
+  ) {
+    const memberDetail = await this.memberService.findMemberDetail(memberId);
+
+    this.responseService.success(res, '수강생 상세 조회 성공', memberDetail);
   }
 
   /* 수강생 등록 */

@@ -16,12 +16,13 @@ export class MemberService {
   ) {}
 
   /* 수강생 정보 불러오기 */
-  async findAllMembers(lectureId?: number): Promise<Member[]> {
-    if (lectureId) {
-      const allMembersByLectureId =
-        await this.memberRepository.findAllMembersByLectureId(lectureId);
-      return allMembersByLectureId;
-    }
+  async findAllMembers(userId: number): Promise<Member[]> {
+    return await this.memberRepository.findAllMembers(userId);
+  }
+
+  /* 수강생 정보 불러오기 */
+  async findMemberDetail(memberId: number): Promise<Member> {
+    return await this.memberRepository.findMemberDetail(memberId);
   }
 
   /* 수강생 등록 */

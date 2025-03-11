@@ -11,11 +11,19 @@ export class MemberRepository {
     @InjectRepository(Member) private memberRepository: Repository<Member>,
   ) {}
 
-  /* 수강생 정보 불러오기 lectureId를 이용해서 */
-  async findAllMembersByLectureId(lectureId: number): Promise<Member[]> {
+  /* 수강생 정보 불러오기 */
+  async findAllMembers(userId: number): Promise<Member[]> {
     return await this.memberRepository.find({
-      where: { lecture: { lectureId } },
+      where: { lecture: { user: { userId } } },
       relations: ['user'],
+    });
+  }
+
+  /* 수강생 정보 불러오기 */
+  async findMemberDetail(memberId: number): Promise<Member> {
+    return await this.memberRepository.findOne({
+      where: { memberId },
+      relations: ['user', 'lecture'],
     });
   }
 
