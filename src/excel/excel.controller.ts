@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -23,8 +24,12 @@ export class ExcelController {
   // }
 
   @Get('export/excel')
-  async exportExcel(@Res() res: Response) {
-    const excelBuffer = await this.excelService.exportExcel();
+  async exportExcel(
+    @Res() res: Response,
+    @Query('lectureId') lectureId?: number,
+  ) {
+    const { userId } = res.locals.user;
+    const excelBuffer = await this.excelService.exportExcel(userId, lectureId);
 
     res.setHeader(
       'Content-Type',
