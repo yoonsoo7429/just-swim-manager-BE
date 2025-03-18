@@ -13,6 +13,8 @@ import { Payment } from 'src/payment/entity/payment.entity';
 import { UserRepository } from 'src/user/user.repository';
 import { User } from 'src/user/entity/user.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { RegistrationRepository } from 'src/registration/registration.repository';
+import { Registration } from 'src/registration/entity/registration.entity';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +24,7 @@ export class AuthService {
     private readonly lectureRepository: LectureRepository,
     private readonly paymentRepository: PaymentRepository,
     private readonly userRepository: UserRepository,
+    private readonly registrationRepository: RegistrationRepository,
   ) {}
 
   /* 관리자 확인 */
@@ -48,19 +51,25 @@ export class AuthService {
     return await this.userRepository.createUser(createUserDto);
   }
 
-  /* Dashboard 정보 조회 */
-  async findDashboardInfo(userId: number): Promise<{
+  /* Dashboard 정보 조회 (강사용) */
+  async findDashboardInfoForInstructor(userId: number): Promise<{
     customers: Customer[];
     lectures: Lecture[];
     payments: Payment[];
+    registrations: Registration[];
   }> {
-    // 전체 고객 정보
-    const customers = await this.customerRepository.findAllCustomers();
-    // 전체 강좌 정보
-    const lectures = await this.lectureRepository.findAllLectures(userId);
-    // 전체 결제 정보
-    const payments = await this.paymentRepository.findAllPayments();
+    const results = await Promise.allSettled([
+      this.customerRepository.findAllCustomers(),
+      this.lectureRepository.findAllLectures(userId),
+      this.paymentRepository.findAllPayments(),
+      this.registrationRepository.findAllRegistrations(userId),
+    ]);
 
-    return { customers, lectures, payments };
+    return {
+      customers: results[0].status === 'fulfilled' ? results[0].value : [],
+      lectures: results[1].status === 'fulfilled' ? results[1].value : [],
+      payments: results[2].status === 'fulfilled' ? results[2].value : [],
+      registrations: results[3].status === 'fulfilled' ? results[3].value : [],
+    };
   }
 }

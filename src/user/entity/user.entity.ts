@@ -7,6 +7,7 @@ import { UserGender } from '../enum/user-gender.enum';
 import { Member } from 'src/member/entity/member.entity';
 import { Payment } from 'src/payment/entity/payment.entity';
 import { BaseTable } from 'src/common/entity/base-table.entity';
+import { Registration } from 'src/registration/entity/registration.entity';
 
 @Entity('user')
 export class User extends BaseTable {
@@ -51,4 +52,7 @@ export class User extends BaseTable {
 
   @OneToMany(() => Payment, (payment) => payment.user)
   payment: Payment[];
+
+  @OneToMany(() => Registration, (registration) => registration.user)
+  registration: Registration[];
 }

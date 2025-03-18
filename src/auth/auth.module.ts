@@ -7,13 +7,15 @@ import { LectureModule } from 'src/lecture/lecture.module';
 import { PaymentModule } from 'src/payment/payment.module';
 import { UserModule } from 'src/user/user.module';
 import { KakaoStrategy } from './strategy/kakao.strategy';
+import { RegistrationModule } from 'src/registration/registration.module';
 
 @Module({
   imports: [
-    forwardRef(() => CustomerModule),
-    forwardRef(() => LectureModule),
-    forwardRef(() => PaymentModule),
-    forwardRef(() => UserModule),
+    CustomerModule,
+    LectureModule,
+    PaymentModule,
+    UserModule,
+    RegistrationModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService, KakaoStrategy],

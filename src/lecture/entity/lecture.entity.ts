@@ -11,6 +11,7 @@ import { Member } from 'src/member/entity/member.entity';
 import { Payment } from 'src/payment/entity/payment.entity';
 import { User } from 'src/user/entity/user.entity';
 import { BaseTable } from 'src/common/entity/base-table.entity';
+import { Registration } from 'src/registration/entity/registration.entity';
 
 @Entity('lecture')
 export class Lecture extends BaseTable {
@@ -44,4 +45,7 @@ export class Lecture extends BaseTable {
 
   @OneToMany(() => Payment, (payment) => payment.lecture)
   payment: Payment[];
+
+  @OneToMany(() => Registration, (registration) => registration.lecture)
+  registration: Registration[];
 }

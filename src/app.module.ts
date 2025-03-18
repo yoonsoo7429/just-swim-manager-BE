@@ -20,6 +20,7 @@ import { MemberModule } from './member/member.module';
 import { PaymentModule } from './payment/payment.module';
 import { UserModule } from './user/user.module';
 import { InstructorModule } from './instructor/instructor.module';
+import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -46,8 +47,8 @@ import { InstructorModule } from './instructor/instructor.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        // synchronize: true,
-        synchronize: false,
+        synchronize: true,
+        // synchronize: false,
       }),
       inject: [ConfigService],
     }),
@@ -60,6 +61,7 @@ import { InstructorModule } from './instructor/instructor.module';
     PaymentModule,
     UserModule,
     InstructorModule,
+    RegistrationModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

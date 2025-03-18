@@ -13,6 +13,7 @@ import { ResponseService } from 'src/common/reponse/reponse.service';
 import { Request, Response } from 'express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { KakaoAuthGuard } from './guard/kakao.guard';
+import { UserType } from 'src/user/enum/user-type.enum';
 
 @Controller()
 export class AuthController {
@@ -83,13 +84,16 @@ export class AuthController {
   /* Dashboard 정보 전달 */
   @Get('dashboard')
   async getDashboardInfo(@Res() res: Response) {
-    const { userId } = res.locals.user;
-    const dashboardInfo = await this.authService.findDashboardInfo(userId);
+    const { userId, userType } = res.locals.user;
 
-    this.responseService.success(
-      res,
-      'Dashboard 정보 조회 성공',
-      dashboardInfo,
-    );
+    if (userType === UserType.INSTRUCTOR) {
+      const dashboardInfo =
+        await this.authService.findDashboardInfoForInstructor(userId);
+      this.responseService.success(
+        res,
+        'Dashboard 정보 조회 성공',
+        dashboardInfo,
+      );
+    }
   }
 }
