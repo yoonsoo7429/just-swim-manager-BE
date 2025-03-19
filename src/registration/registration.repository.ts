@@ -21,22 +21,27 @@ export class RegistrationRepository {
     });
   }
 
-  /* 수강 신청 수정 */
-  async updateRegistration(
-    lectureId: number,
-    newLectureId: number,
-  ): Promise<void> {
-    await this.registrationRepository.update(
-      { lecture: { lectureId } },
-      { lecture: { lectureId: newLectureId } },
-    );
-  }
-
   /* 수강 신청 조회 (강사) */
   async findAllRegistrations(userId: number): Promise<Registration[]> {
     return this.registrationRepository.find({
       where: { lecture: { user: { userId } }, deletedAt: null },
-      relations: ['user', 'lecture'],
+      relations: ['user', 'lecture', 'payment'],
     });
+  }
+
+  /* 수강 신청 상세 조회 */
+  async findRegistrationDetail(registrationId: number): Promise<Registration> {
+    return this.registrationRepository.findOne({
+      where: { registrationId },
+      relations: ['user', 'lecture', 'lecture.user'],
+    });
+  }
+
+  /* 수강 신청 승인 */
+  async approveRegistration(registrationId: number): Promise<void> {
+    await this.registrationRepository.update(
+      { registrationId },
+      { approve: true },
+    );
   }
 }

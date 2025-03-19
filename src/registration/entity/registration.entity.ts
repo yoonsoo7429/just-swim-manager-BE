@@ -1,7 +1,15 @@
 import { BaseTable } from 'src/common/entity/base-table.entity';
 import { Lecture } from 'src/lecture/entity/lecture.entity';
+import { Payment } from 'src/payment/entity/payment.entity';
 import { User } from 'src/user/entity/user.entity';
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('registration')
 export class Registration extends BaseTable {
@@ -15,4 +23,10 @@ export class Registration extends BaseTable {
   @ManyToOne(() => Lecture, (lecture) => lecture.registration)
   @JoinColumn({ name: 'lectureId' })
   lecture: Lecture;
+
+  @Column({ type: 'boolean', default: false })
+  approve: boolean;
+
+  @OneToMany(() => Payment, (payment) => payment.registration)
+  payment: Payment[];
 }

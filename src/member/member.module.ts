@@ -8,11 +8,7 @@ import { PaymentModule } from 'src/payment/payment.module';
 import { LectureModule } from 'src/lecture/lecture.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Member]),
-    forwardRef(() => LectureModule),
-    forwardRef(() => PaymentModule),
-  ],
+  imports: [TypeOrmModule.forFeature([Member]), LectureModule],
   controllers: [MemberController],
   providers: [MemberService, MemberRepository],
   exports: [MemberService, MemberRepository],

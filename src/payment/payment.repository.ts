@@ -60,7 +60,7 @@ export class PaymentRepository {
   async findPaymentDetail(paymentId: number): Promise<Payment> {
     return await this.paymentRepository.findOne({
       where: { paymentId },
-      relations: ['user', 'lecture'],
+      relations: ['user', 'lecture', 'registration'],
     });
   }
 }

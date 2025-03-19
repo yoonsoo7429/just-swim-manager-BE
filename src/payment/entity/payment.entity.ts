@@ -1,5 +1,6 @@
 import { BaseTable } from 'src/common/entity/base-table.entity';
 import { Lecture } from 'src/lecture/entity/lecture.entity';
+import { Registration } from 'src/registration/entity/registration.entity';
 import { User } from 'src/user/entity/user.entity';
 import {
   Column,
@@ -21,6 +22,10 @@ export class Payment extends BaseTable {
   @ManyToOne(() => Lecture, (lecture) => lecture.payment)
   @JoinColumn({ name: 'lectureId' })
   lecture: Lecture;
+
+  @ManyToOne(() => Registration, (registration) => registration.payment)
+  @JoinColumn({ name: 'registrationId' })
+  registration: Registration;
 
   @Column('varchar')
   paymentFee: string;

@@ -2,6 +2,7 @@ import {
   Controller,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Res,
   UnauthorizedException,
@@ -38,5 +39,17 @@ export class RegistrationController {
     );
 
     this.responseService.success(res, '수강 신청 완료', registration);
+  }
+
+  /* 수강 신청 수정 */
+  @Patch(':registrationId')
+  async updateRegistration(
+    @Res() res: Response,
+    @Param('registrationId') registrationId: number,
+  ) {
+    const { userId } = res.locals.user;
+    await this.registrationService.updateRegistration(userId, registrationId);
+
+    this.responseService.success(res, '수강 신청 수정 완료');
   }
 }
