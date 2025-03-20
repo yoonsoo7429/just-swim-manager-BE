@@ -18,12 +18,12 @@ export class PaymentService {
     return await this.paymentRepository.findPaymentDetail(paymentId);
   }
 
-  /* 수강료 지불 */
+  /* 결제 정보 생성 */
   async createPayment(createPaymentDto: CreatePaymentDto): Promise<Payment> {
     return await this.paymentRepository.createPayment(createPaymentDto);
   }
 
-  /* 수강료 지불 기록 수정 */
+  /* 결제 처리 */
   async updatePayment(
     paymentId: number,
     editPaymentDto: EditPaymentDto,
@@ -31,7 +31,7 @@ export class PaymentService {
     await this.paymentRepository.editPayment(paymentId, editPaymentDto);
   }
 
-  /* 수강료 환불 */
+  /* 결제 환불 */
   async softDeletePayment(paymentId: number): Promise<void> {
     await this.paymentRepository.softDeletePayment(paymentId);
   }

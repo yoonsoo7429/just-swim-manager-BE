@@ -55,22 +55,22 @@ export class PaymentController {
 
   /* 수강료 지불 기록 수정 */
   @Patch(':paymentId')
-  async updateMember(
+  async updatePayment(
     @Res() res: Response,
     @Param('paymentId', ParseIntPipe) paymentId: number,
     @Body() editPaymentDto: EditPaymentDto,
   ) {
     await this.paymentService.updatePayment(paymentId, editPaymentDto);
-    this.responseService.success(res, '수강료 지불 기록 수정 성공');
+    this.responseService.success(res, '결제 수정 성공');
   }
 
   /* 수강료 환불 */
   @Delete(':paymentId')
-  async softDeleteMember(
+  async softDeletePayment(
     @Res() res: Response,
     @Param('paymentId', ParseIntPipe) paymentId: number,
   ) {
     await this.paymentService.softDeletePayment(paymentId);
-    this.responseService.success(res, '수강료 환불 성공');
+    this.responseService.success(res, '결제 환불 성공');
   }
 }

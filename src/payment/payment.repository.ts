@@ -11,7 +11,7 @@ export class PaymentRepository {
     @InjectRepository(Payment) private paymentRepository: Repository<Payment>,
   ) {}
 
-  /* 수강료 지불 */
+  /* 결제 정보 생성 */
   async createPayment(createPaymentDto: CreatePaymentDto): Promise<Payment> {
     const { userId, lectureId, paymentFee, paymentDate } = createPaymentDto;
     const newPayment = this.paymentRepository.create({
@@ -24,7 +24,7 @@ export class PaymentRepository {
     return newPayment;
   }
 
-  /* 수강료 지불 기록 수정 */
+  /* 결제 처리 */
   async editPayment(
     paymentId: number,
     editPaymentDto: EditPaymentDto,
@@ -41,7 +41,7 @@ export class PaymentRepository {
     );
   }
 
-  /* 수강료 환불 */
+  /* 결제 환불 */
   async softDeletePayment(paymentId: number): Promise<UpdateResult> {
     return await this.paymentRepository.update(
       { paymentId },
