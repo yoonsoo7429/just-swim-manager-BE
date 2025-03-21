@@ -3,12 +3,16 @@ import { RegistrationRepository } from './registration.repository';
 import { Registration } from './entity/registration.entity';
 import { PaymentRepository } from 'src/payment/payment.repository';
 import { CreatePaymentDto } from 'src/payment/dto/create-payment.dto';
+import { MemberRepository } from 'src/member/member.repository';
+import { CreateMemberDto } from 'src/member/dto/create-member.dto';
+import * as moment from 'moment';
 
 @Injectable()
 export class RegistrationService {
   constructor(
     private readonly registrationRepository: RegistrationRepository,
     private readonly paymentRepository: PaymentRepository,
+    private readonly memberRepository: MemberRepository,
   ) {}
 
   /* 수강 신청 */
@@ -38,7 +42,18 @@ export class RegistrationService {
       await this.registrationRepository.findRegistrationDetail(registrationId);
 
     if (registration.lecture.user.userId === userId) {
-      await this.registrationRepository.approveRegistration(registrationId);
+      const approveResult =
+        await this.registrationRepository.approveRegistration(registrationId);
+
+      if (approveResult) {
+        const createMemberDto: CreateMemberDto = {
+          userId: approveResult.user.userId,
+          lectureId: approveResult.lecture.lectureId,
+          memberProgress: approveResult.registrationProgress,
+          memberRegistrationDate: moment().format('YYYY.MM.DD'),
+        };
+        await this.memberRepository.createMember(createMemberDto);
+      }
     }
     if (registration.user.userId) {
     }

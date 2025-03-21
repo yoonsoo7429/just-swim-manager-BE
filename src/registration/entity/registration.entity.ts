@@ -1,5 +1,6 @@
 import { BaseTable } from 'src/common/entity/base-table.entity';
 import { Lecture } from 'src/lecture/entity/lecture.entity';
+import { MemberProgress } from 'src/member/enum/member-progress.enum';
 import { Payment } from 'src/payment/entity/payment.entity';
 import { User } from 'src/user/entity/user.entity';
 import {
@@ -26,6 +27,9 @@ export class Registration extends BaseTable {
 
   @Column({ type: 'boolean', default: false })
   approve: boolean;
+
+  @Column({ type: 'enum', enum: MemberProgress })
+  registrationProgress: MemberProgress;
 
   @OneToMany(() => Payment, (payment) => payment.registration)
   payment: Payment[];
