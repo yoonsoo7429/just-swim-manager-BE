@@ -23,11 +23,18 @@ export class LectureRepository {
     });
   }
 
-  /* 수업 전체 조회 */
-  async findAllLectures(userId: number): Promise<Lecture[]> {
+  /* 수업 전체 조회(강사용) */
+  async findAllLecturesForInsturctor(userId: number): Promise<Lecture[]> {
     return await this.lectureRepository.find({
       where: { user: { userId } },
       relations: ['member'],
+    });
+  }
+
+  /* 수업 전체 조회(고객용) */
+  async findAllLecturesForCustomer(userId: number): Promise<Lecture[]> {
+    return await this.lectureRepository.find({
+      where: { member: { user: { userId } } },
     });
   }
 

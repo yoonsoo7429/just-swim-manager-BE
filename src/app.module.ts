@@ -74,6 +74,7 @@ export class AppModule implements NestModule {
       .exclude(
         { path: 'Oauth/kakao', method: RequestMethod.GET },
         { path: 'Oauth/kakao/callback', method: RequestMethod.GET },
+        { path: 'login', method: RequestMethod.POST },
       )
       .forRoutes({
         path: '*',

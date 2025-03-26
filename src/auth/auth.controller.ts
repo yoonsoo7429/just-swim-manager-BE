@@ -91,9 +91,34 @@ export class AuthController {
         await this.authService.findDashboardInfoForInstructor(userId);
       this.responseService.success(
         res,
-        'Dashboard 정보 조회 성공',
+        'Dashboard(instructor) 정보 조회 성공',
         dashboardInfo,
       );
     }
+
+    if (userType === UserType.CUSTOMER) {
+      const dashboardInfo =
+        await this.authService.findDashboardInfoForCustomer(userId);
+      this.responseService.success(
+        res,
+        'Dahsboard(customer) 정보 조회 성공',
+        dashboardInfo,
+      );
+    }
+  }
+
+  @Post('login')
+  async login(
+    @Res() res: Response,
+    @Body('email') email: string,
+    @Body('provider') provider: string,
+  ) {
+    const user = await this.authService.validateUser(email, provider);
+
+    let userId: number = user.userId;
+    let token: string = await this.authService.generateJwtToken(userId);
+
+    res.cookie('authorization', token);
+    this.responseService.success(res, '로그인 성공');
   }
 }

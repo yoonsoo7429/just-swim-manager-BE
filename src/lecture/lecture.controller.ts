@@ -40,8 +40,8 @@ export class LectureController {
   /* 수업 전체 조회 */
   @Get()
   async getAllLectures(@Res() res: Response) {
-    const { userId } = res.locals.user;
-    const lectures = await this.lectureService.getAllLectures(userId);
+    const { userId, userType } = res.locals.user;
+    const lectures = await this.lectureService.getAllLectures(userType, userId);
 
     this.responseService.success(res, '수업 전체 조회 성공', lectures);
   }

@@ -60,7 +60,7 @@ export class AuthService {
   }> {
     const results = await Promise.allSettled([
       this.customerRepository.findAllCustomers(),
-      this.lectureRepository.findAllLectures(userId),
+      this.lectureRepository.findAllLecturesForInsturctor(userId),
       this.paymentRepository.findAllPayments(),
       this.registrationRepository.findAllRegistrations(userId),
     ]);
@@ -70,6 +70,25 @@ export class AuthService {
       lectures: results[1].status === 'fulfilled' ? results[1].value : [],
       payments: results[2].status === 'fulfilled' ? results[2].value : [],
       registrations: results[3].status === 'fulfilled' ? results[3].value : [],
+    };
+  }
+
+  /* Dashboard 정보 조회 (강사용) */
+  async findDashboardInfoForCustomer(userId: number): Promise<{
+    lectures: Lecture[];
+    // payments: Payment[];
+    // registrations: Registration[];
+  }> {
+    const results = await Promise.allSettled([
+      this.lectureRepository.findAllLecturesForCustomer(userId),
+      // this.paymentRepository.findAllPayments(),
+      // this.registrationRepository.findAllRegistrations(userId),
+    ]);
+
+    return {
+      lectures: results[0].status === 'fulfilled' ? results[0].value : [],
+      // payments: results[1].status === 'fulfilled' ? results[1].value : [],
+      // registrations: results[2].status === 'fulfilled' ? results[2].value : [],
     };
   }
 }

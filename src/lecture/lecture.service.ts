@@ -7,6 +7,7 @@ import { LectureRepository } from './lecture.repository';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { Lecture } from './entity/lecture.entity';
 import { EditLectureDto } from './dto/edit-lecture.dto';
+import { UserType } from 'src/user/enum/user-type.enum';
 
 @Injectable()
 export class LectureService {
@@ -21,8 +22,14 @@ export class LectureService {
   }
 
   /* 수업 전체 조회 */
-  async getAllLectures(userId: number): Promise<Lecture[]> {
-    return await this.lectureRepository.findAllLectures(userId);
+  async getAllLectures(userType: UserType, userId: number): Promise<Lecture[]> {
+    if (userType === UserType.INSTRUCTOR) {
+      return await this.lectureRepository.findAllLecturesForInsturctor(userId);
+    }
+
+    if (userType === UserType.CUSTOMER) {
+      return await this.lectureRepository.findAllLecturesForCustomer(userId);
+    }
   }
 
   /* 수업 상세 조회 */
