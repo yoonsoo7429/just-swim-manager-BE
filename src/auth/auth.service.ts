@@ -62,7 +62,7 @@ export class AuthService {
       this.customerRepository.findAllCustomers(),
       this.lectureRepository.findAllLecturesForInsturctor(userId),
       this.paymentRepository.findAllPayments(),
-      this.registrationRepository.findAllRegistrations(userId),
+      this.registrationRepository.findAllRegistrationsForInstructor(userId),
     ]);
 
     return {
@@ -73,14 +73,14 @@ export class AuthService {
     };
   }
 
-  /* Dashboard 정보 조회 (강사용) */
+  /* Dashboard 정보 조회 (고객용) */
   async findDashboardInfoForCustomer(userId: number): Promise<{
     lectures: Lecture[];
     // payments: Payment[];
     // registrations: Registration[];
   }> {
     const results = await Promise.allSettled([
-      this.lectureRepository.findAllLecturesForCustomer(userId),
+      this.lectureRepository.findAllLecturesForCustomer(),
       // this.paymentRepository.findAllPayments(),
       // this.registrationRepository.findAllRegistrations(userId),
     ]);

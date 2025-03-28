@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RegistrationRepository } from './registration.repository';
 import { Registration } from './entity/registration.entity';
 import { PaymentRepository } from 'src/payment/payment.repository';
@@ -20,17 +24,26 @@ export class RegistrationService {
     userId: number,
     lectureId: number,
   ): Promise<Registration> {
-    // 결제 정보 생성
-    const createPaymentDto: CreatePaymentDto = {
-      userId: userId,
-      lectureId: lectureId,
-      paymentFee: '0',
-      paymentDate: null,
-    };
+    const exRegistration =
+      await this.registrationRepository.findOneRegistrationForCustomer(
+        lectureId,
+        userId,
+      );
+    if (exRegistration) {
+      throw new ForbiddenException('강의에 대한 수강 신청 내역이 있습니다.');
+    } else {
+      // 결제 정보 생성
+      const createPaymentDto: CreatePaymentDto = {
+        userId: userId,
+        lectureId: lectureId,
+        paymentFee: '0',
+        paymentDate: null,
+      };
 
-    await this.paymentRepository.createPayment(createPaymentDto);
+      await this.paymentRepository.createPayment(createPaymentDto);
 
-    return this.registrationRepository.createRegistration(userId, lectureId);
+      return this.registrationRepository.createRegistration(userId, lectureId);
+    }
   }
 
   /* 수강 신청 수정 */

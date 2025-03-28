@@ -22,10 +22,30 @@ export class RegistrationRepository {
   }
 
   /* 수강 신청 조회 (강사) */
-  async findAllRegistrations(userId: number): Promise<Registration[]> {
+  async findAllRegistrationsForInstructor(
+    userId: number,
+  ): Promise<Registration[]> {
     return this.registrationRepository.find({
       where: { lecture: { user: { userId } }, deletedAt: null, approve: false },
       relations: ['user', 'lecture', 'payment'],
+    });
+  }
+
+  /* 수강 신청 조회 (고객) */
+  async findAllRegistrationsForCustomer(
+    userId: number,
+  ): Promise<Registration[]> {
+    return this.registrationRepository.find({
+      where: { user: { userId }, approve: false },
+    });
+  }
+
+  async findOneRegistrationForCustomer(
+    lectureId: number,
+    userId: number,
+  ): Promise<Registration> {
+    return this.registrationRepository.findOne({
+      where: { user: { userId }, lecture: { lectureId }, approve: false },
     });
   }
 

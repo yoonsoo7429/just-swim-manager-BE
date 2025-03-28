@@ -28,7 +28,16 @@ export class LectureService {
     }
 
     if (userType === UserType.CUSTOMER) {
-      return await this.lectureRepository.findAllLecturesForCustomer(userId);
+      const lectures =
+        await this.lectureRepository.findAllLecturesForCustomer();
+
+      return lectures.filter((lecture) => {
+        const memberCount = lecture.member.length;
+        const isUserInLecture = lecture.member.some(
+          (member) => member.user.userId === userId,
+        );
+        return lecture.lectureCapacity >= memberCount && !isUserInLecture;
+      });
     }
   }
 

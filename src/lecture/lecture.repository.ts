@@ -32,9 +32,9 @@ export class LectureRepository {
   }
 
   /* 수업 전체 조회(고객용) */
-  async findAllLecturesForCustomer(userId: number): Promise<Lecture[]> {
+  async findAllLecturesForCustomer(): Promise<Lecture[]> {
     return await this.lectureRepository.find({
-      where: { member: { user: { userId } } },
+      relations: ['member', 'member.user', 'registration'],
     });
   }
 
