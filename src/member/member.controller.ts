@@ -26,9 +26,12 @@ export class MemberController {
   /* 수강생 정보 조회하기 */
   @Get()
   async getAllMembers(@Res() res: Response) {
-    const { userId } = res.locals.user;
+    const { userId, userType } = res.locals.user;
 
-    const allMembers = await this.memberService.findAllMembers(userId);
+    const allMembers = await this.memberService.findAllMembers(
+      userId,
+      userType,
+    );
 
     this.responseService.success(res, '수강생들 정보 조회 성공', allMembers);
   }

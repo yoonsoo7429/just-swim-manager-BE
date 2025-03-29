@@ -32,18 +32,29 @@ export class RegistrationService {
     if (exRegistration) {
       throw new ForbiddenException('강의에 대한 수강 신청 내역이 있습니다.');
     } else {
+      const registration = await this.registrationRepository.createRegistration(
+        userId,
+        lectureId,
+      );
       // 결제 정보 생성
       const createPaymentDto: CreatePaymentDto = {
         userId: userId,
         lectureId: lectureId,
+        registrationId: registration.registrationId,
         paymentFee: '0',
         paymentDate: null,
       };
 
       await this.paymentRepository.createPayment(createPaymentDto);
-
-      return this.registrationRepository.createRegistration(userId, lectureId);
+      return registration;
     }
+  }
+
+  /* 수강 신청 목록 조회 */
+  async findAllRegistrations(userId: number): Promise<Registration[]> {
+    return await this.registrationRepository.findAllRegistrationsForCustomer(
+      userId,
+    );
   }
 
   /* 수강 신청 수정 */

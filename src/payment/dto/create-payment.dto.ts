@@ -10,6 +10,10 @@ export class CreatePaymentDto {
   lectureId: number;
 
   @IsNotEmpty()
+  @IsNumber()
+  registrationId: number;
+
+  @IsNotEmpty()
   @IsString()
   paymentFee: string;
 

@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Patch,
@@ -41,7 +42,19 @@ export class RegistrationController {
     this.responseService.success(res, '수강 신청 완료', registration);
   }
 
-  /* 수강 신청 조회 */
+  /* 수강 신청 목록 조회 */
+  @Get()
+  async getAllRegistrations(@Res() res: Response) {
+    const { userId } = res.locals.user;
+    const registrations =
+      await this.registrationService.findAllRegistrations(userId);
+
+    this.responseService.success(
+      res,
+      '수강 신청 목록 조회 완료',
+      registrations,
+    );
+  }
 
   /* 수강 신청 수정 */
   @Patch(':registrationId')

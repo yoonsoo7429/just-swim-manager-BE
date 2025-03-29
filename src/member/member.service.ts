@@ -3,14 +3,20 @@ import { MemberRepository } from './member.repository';
 import { CreateMemberDto } from './dto/create-member.dto';
 import { Member } from './entity/member.entity';
 import { EditMemberDto } from './dto/edit-member.dto';
+import { UserType } from 'src/user/enum/user-type.enum';
 
 @Injectable()
 export class MemberService {
   constructor(private readonly memberRepository: MemberRepository) {}
 
   /* 수강생 정보 불러오기 */
-  async findAllMembers(userId: number): Promise<Member[]> {
-    return await this.memberRepository.findAllMembers(userId);
+  async findAllMembers(userId: number, userType: UserType): Promise<Member[]> {
+    if (userType === UserType.INSTRUCTOR) {
+      return await this.memberRepository.findAllMembersForInstructor(userId);
+    }
+    if (userType === UserType.CUSTOMER) {
+      return await this.memberRepository.findAllMembersForCustomer(userId);
+    }
   }
 
   /* 수강생 정보 불러오기 */

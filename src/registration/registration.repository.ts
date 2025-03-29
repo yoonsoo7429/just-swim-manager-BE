@@ -36,7 +36,8 @@ export class RegistrationRepository {
     userId: number,
   ): Promise<Registration[]> {
     return this.registrationRepository.find({
-      where: { user: { userId }, approve: false },
+      where: { user: { userId } },
+      relations: ['lecture', 'lecture.member'],
     });
   }
 
