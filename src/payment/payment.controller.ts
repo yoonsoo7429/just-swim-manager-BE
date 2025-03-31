@@ -26,7 +26,8 @@ export class PaymentController {
   /* 전체 조회 */
   @Get()
   async getAllPayments(@Res() res: Response) {
-    const payments = await this.paymentService.getAllPayments();
+    const { userId, userType } = res.locals.user;
+    const payments = await this.paymentService.getAllPayments(userId, userType);
 
     this.responseService.success(res, '결제 정보 전체 조회 성공', payments);
   }

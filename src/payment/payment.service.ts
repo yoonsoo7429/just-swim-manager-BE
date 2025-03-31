@@ -3,14 +3,20 @@ import { PaymentRepository } from './payment.repository';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Payment } from './entity/payment.entity';
 import { EditPaymentDto } from './dto/edit-payment.dto';
+import { UserType } from 'src/user/enum/user-type.enum';
 
 @Injectable()
 export class PaymentService {
   constructor(private readonly paymentRepository: PaymentRepository) {}
 
   /* 전체 조회 */
-  async getAllPayments(): Promise<Payment[]> {
-    return await this.paymentRepository.findAllPayments();
+  async getAllPayments(userId: number, userType: UserType): Promise<Payment[]> {
+    if (userType === UserType.INSTRUCTOR) {
+      return await this.paymentRepository.findAllPaymentsForInstructor(userId);
+    }
+    if (userType === UserType.CUSTOMER) {
+      return await this.paymentRepository.findAllPaymentsForCustomer(userId);
+    }
   }
 
   /* 결제 정보 상세 조회 */

@@ -61,7 +61,7 @@ export class AuthService {
     const results = await Promise.allSettled([
       this.customerRepository.findAllCustomers(),
       this.lectureRepository.findAllLecturesForInsturctor(userId),
-      this.paymentRepository.findAllPayments(),
+      this.paymentRepository.findAllPaymentsForInstructor(userId),
       this.registrationRepository.findAllRegistrationsForInstructor(userId),
     ]);
 
