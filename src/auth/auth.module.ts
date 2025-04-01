@@ -8,6 +8,7 @@ import { PaymentModule } from 'src/payment/payment.module';
 import { UserModule } from 'src/user/user.module';
 import { KakaoStrategy } from './strategy/kakao.strategy';
 import { RegistrationModule } from 'src/registration/registration.module';
+import { MemberModule } from 'src/member/member.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RegistrationModule } from 'src/registration/registration.module';
     PaymentModule,
     UserModule,
     RegistrationModule,
+    MemberModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtService, KakaoStrategy],

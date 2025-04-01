@@ -25,4 +25,8 @@ export class EditLectureDto {
   @IsOptional()
   @IsNumber()
   lectureCapacity: number;
+
+  @IsOptional()
+  @IsString()
+  lectureDate: string;
 }

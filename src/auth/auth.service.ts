@@ -15,6 +15,8 @@ import { User } from 'src/user/entity/user.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { RegistrationRepository } from 'src/registration/registration.repository';
 import { Registration } from 'src/registration/entity/registration.entity';
+import { MemberRepository } from 'src/member/member.repository';
+import { Member } from 'src/member/entity/member.entity';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +27,7 @@ export class AuthService {
     private readonly paymentRepository: PaymentRepository,
     private readonly userRepository: UserRepository,
     private readonly registrationRepository: RegistrationRepository,
+    private readonly memberRepository: MemberRepository,
   ) {}
 
   /* 관리자 확인 */
@@ -75,12 +78,12 @@ export class AuthService {
 
   /* Dashboard 정보 조회 (고객용) */
   async findDashboardInfoForCustomer(userId: number): Promise<{
-    lectures: Lecture[];
+    lectures: Member[];
     // payments: Payment[];
     // registrations: Registration[];
   }> {
     const results = await Promise.allSettled([
-      this.lectureRepository.findAllLecturesForCustomer(),
+      this.memberRepository.findAllMembersForCustomer(userId),
       // this.paymentRepository.findAllPayments(),
       // this.registrationRepository.findAllRegistrations(userId),
     ]);

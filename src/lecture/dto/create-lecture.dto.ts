@@ -1,4 +1,10 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { LectureLevel } from '../enum/lecture-level.enum';
 
 export class CreateLectureDto {
@@ -25,4 +31,8 @@ export class CreateLectureDto {
   @IsNotEmpty()
   @IsNumber()
   lectureCapacity: number;
+
+  @IsOptional()
+  @IsString()
+  lectureDate: string;
 }

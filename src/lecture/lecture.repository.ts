@@ -27,7 +27,7 @@ export class LectureRepository {
   async findAllLecturesForInsturctor(userId: number): Promise<Lecture[]> {
     return await this.lectureRepository.find({
       where: { user: { userId } },
-      relations: ['member'],
+      relations: ['member', 'member.user', 'registration'],
     });
   }
 

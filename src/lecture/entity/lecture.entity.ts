@@ -40,6 +40,9 @@ export class Lecture extends BaseTable {
   @Column({ type: 'bigint' })
   lectureCapacity: number;
 
+  @Column({ type: 'varchar', nullable: true })
+  lectureDate: string;
+
   @OneToMany(() => Member, (member) => member.lecture)
   member: Member[];
 
