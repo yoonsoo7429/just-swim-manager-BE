@@ -58,10 +58,15 @@ export class AuthController {
         res.redirect(process.env.SELECT_USERTYPE_REDIRECT_URI + `/${query}`);
       }
       // userType 지정되어 있을 경우 Home으로 redirect
-      if (exUser.userType !== null) {
+      if (exUser.userType === UserType.INSTRUCTOR) {
         const token = await this.authService.generateJwtToken(exUser.userId);
         const query = '?token=' + token;
-        res.redirect(process.env.HOME_REDIRECT_URI + `/${query}`);
+        res.redirect(process.env.INSTRUCTOR_REDIRECT_URI + `/${query}`);
+      }
+      if (exUser.userType === UserType.CUSTOMER) {
+        const token = await this.authService.generateJwtToken(exUser.userId);
+        const query = '?token=' + token;
+        res.redirect(process.env.CUSTOMER_REDIRECT_URI + `/${query}`);
       }
     }
 
