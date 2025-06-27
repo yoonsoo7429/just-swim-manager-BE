@@ -4,6 +4,7 @@ import { User } from './entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditUserDto } from './dto/edit-user.dto';
+import { Provider } from 'src/auth/enum/provider.enum';
 
 @Injectable()
 export class UserRepository {
@@ -17,7 +18,7 @@ export class UserRepository {
   }
 
   /* email로 조회 */
-  async findUserByEmail(email: string, provider: string): Promise<User> {
+  async findUserByEmail(email: string, provider: Provider): Promise<User> {
     return await this.userRepository.findOne({ where: { email, provider } });
   }
 

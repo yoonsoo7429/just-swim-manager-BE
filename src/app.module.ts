@@ -16,11 +16,8 @@ import { ReponseModule } from './common/reponse/reponse.module';
 import { JwtService } from '@nestjs/jwt';
 import { AuthMiddleWare } from './auth/middleware/auth.middleware';
 import { LectureModule } from './lecture/lecture.module';
-import { MemberModule } from './member/member.module';
-import { PaymentModule } from './payment/payment.module';
 import { UserModule } from './user/user.module';
 import { InstructorModule } from './instructor/instructor.module';
-import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -57,11 +54,8 @@ import { RegistrationModule } from './registration/registration.module';
     AuthModule,
     ReponseModule,
     LectureModule,
-    MemberModule,
-    PaymentModule,
     UserModule,
     InstructorModule,
-    RegistrationModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

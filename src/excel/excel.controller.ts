@@ -23,20 +23,20 @@ export class ExcelController {
   //   return { message: '엑셀 파일 처리 완료', data: extractedData };
   // }
 
-  @Get('export/excel')
-  async exportExcel(
-    @Res() res: Response,
-    @Query('lectureId') lectureId?: number,
-  ) {
-    const { userId } = res.locals.user;
-    const excelBuffer = await this.excelService.exportExcel(userId, lectureId);
+  // @Get('export/excel')
+  // async exportExcel(
+  //   @Res() res: Response,
+  //   @Query('lectureId') lectureId?: number,
+  // ) {
+  //   const { userId } = res.locals.user;
+  //   const excelBuffer = await this.excelService.exportExcel(userId, lectureId);
 
-    res.setHeader(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    );
-    res.setHeader('Content-Disposition', 'attachment; filename=customers.xlsx');
+  //   res.setHeader(
+  //     'Content-Type',
+  //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  //   );
+  //   res.setHeader('Content-Disposition', 'attachment; filename=customers.xlsx');
 
-    res.end(excelBuffer);
-  }
+  //   res.end(excelBuffer);
+  // }
 }

@@ -1,4 +1,11 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { Provider } from 'src/auth/enum/provider.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -6,18 +13,16 @@ export class CreateUserDto {
   email: string;
 
   @IsNotEmpty()
-  @IsString()
-  provider: string;
+  @IsEnum(Provider)
+  provider: Provider;
 
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @IsNotEmpty()
   @IsString()
   birth: string;
 
-  @IsNotEmpty()
   @IsString()
   phoneNumber: string;
 }

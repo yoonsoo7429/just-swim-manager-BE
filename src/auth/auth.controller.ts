@@ -14,6 +14,7 @@ import { Request, Response } from 'express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { KakaoAuthGuard } from './guard/kakao.guard';
 import { UserType } from 'src/user/enum/user-type.enum';
+import { Provider } from './enum/provider.enum';
 
 @Controller()
 export class AuthController {
@@ -36,7 +37,7 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<void> {
     let profile: any = req.user;
-    let provider: string = profile.provider;
+    let provider: Provider = profile.provider;
     let name: string = profile._json.kakao_account.name;
     let email: string = profile._json.kakao_account.email;
     // birth
@@ -84,46 +85,5 @@ export class AuthController {
       const query = '?token=' + token;
       res.redirect(process.env.SELECT_USERTYPE_REDIRECT_URI + `/${query}`);
     }
-  }
-
-  /* Dashboard 정보 전달 */
-  @Get('dashboard')
-  async getDashboardInfo(@Res() res: Response) {
-    const { userId, userType } = res.locals.user;
-
-    if (userType === UserType.INSTRUCTOR) {
-      const dashboardInfo =
-        await this.authService.findDashboardInfoForInstructor(userId);
-      this.responseService.success(
-        res,
-        'Dashboard(instructor) 정보 조회 성공',
-        dashboardInfo,
-      );
-    }
-
-    if (userType === UserType.CUSTOMER) {
-      const dashboardInfo =
-        await this.authService.findDashboardInfoForCustomer(userId);
-      this.responseService.success(
-        res,
-        'Dahsboard(customer) 정보 조회 성공',
-        dashboardInfo,
-      );
-    }
-  }
-
-  @Post('login')
-  async login(
-    @Res() res: Response,
-    @Body('email') email: string,
-    @Body('provider') provider: string,
-  ) {
-    const user = await this.authService.validateUser(email, provider);
-
-    let userId: number = user.userId;
-    let token: string = await this.authService.generateJwtToken(userId);
-
-    res.cookie('authorization', token);
-    this.responseService.success(res, '로그인 성공');
   }
 }

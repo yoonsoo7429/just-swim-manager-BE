@@ -1,32 +1,25 @@
 import { Lecture } from 'src/lecture/entity/lecture.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { UserType } from '../enum/user-type.enum';
-import { Customer } from 'src/customer/entity/customer.entity';
-import { Instructor } from 'src/instructor/entity/instructor.entity';
-import { UserGender } from '../enum/user-gender.enum';
-import { Member } from 'src/member/entity/member.entity';
-import { Payment } from 'src/payment/entity/payment.entity';
 import { BaseTable } from 'src/common/entity/base-table.entity';
-import { Registration } from 'src/registration/entity/registration.entity';
+import { UserType } from '../enum/user-type.enum';
+import { Provider } from 'src/auth/enum/provider.enum';
+import { Status } from 'src/common/enum/status.enum';
 
 @Entity('user')
 export class User extends BaseTable {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   userId: number;
 
-  @Column({ type: 'varchar', nullable: true })
-  provider: string;
-
   @Column({ type: 'enum', enum: UserType, nullable: true })
   userType: UserType;
 
-  @Column({ type: 'enum', enum: UserGender, nullable: true })
-  gender: UserGender;
+  @Column({ type: 'enum', enum: Provider, nullable: true })
+  provider: Provider;
 
-  @Column('varchar')
+  @Column({ type: 'varchar' })
   email: string;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar' })
   name: string;
 
   @Column({ type: 'varchar', nullable: true })
@@ -35,24 +28,9 @@ export class User extends BaseTable {
   @Column({ type: 'varchar', nullable: true })
   phoneNumber: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  address: string;
-
-  @OneToMany(() => Customer, (customer) => customer.user)
-  customer: Customer[];
-
-  @OneToMany(() => Instructor, (instructor) => instructor.user)
-  instructor: Instructor[];
+  @Column({ type: 'enum', enum: Status, nullable: true })
+  instructorStatus: Status;
 
   @OneToMany(() => Lecture, (lecture) => lecture.user)
   lecture: Lecture[];
-
-  @OneToMany(() => Member, (member) => member.user)
-  member: Member[];
-
-  @OneToMany(() => Payment, (payment) => payment.user)
-  payment: Payment[];
-
-  @OneToMany(() => Registration, (registration) => registration.user)
-  registration: Registration[];
 }

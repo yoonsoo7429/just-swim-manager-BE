@@ -28,16 +28,7 @@ export class UserService {
     if (!user) {
       throw new UnauthorizedException('회원 정보를 완성할 수 없습니다.');
     }
-    if (editUserDto.userType === UserType.CUSTOMER) {
-      await this.userRepository.editUser(userId, editUserDto);
-      await this.customerRepository.createCustomer(userId);
-    }
-    if (editUserDto.userType === UserType.INSTRUCTOR) {
-      if (process.env.INSTRUCTOR_KEY === editUserDto.instructorKey) {
-        await this.userRepository.editUser(userId, editUserDto);
-        await this.instructorRepository.createInstructor(userId);
-      }
-    }
+    await this.userRepository.editUser(userId, editUserDto);
   }
 
   /* user 정보 수정 */

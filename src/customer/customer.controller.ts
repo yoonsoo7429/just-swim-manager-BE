@@ -21,44 +21,4 @@ export class CustomerController {
     private readonly customerService: CustomerService,
     private readonly responseService: ResponseService,
   ) {}
-
-  /* 전체 회원 조회 */
-  @Get()
-  async getAllCustomers(@Res() res: Response) {
-    const allCustomers = await this.customerService.getAllCustomers();
-    this.responseService.success(res, '전체 회원 조회 성공', allCustomers);
-  }
-
-  /* 회원 상세 조회 */
-  // @Get(':customerId')
-  // async getCustomerDetail(
-  //   @Res() res: Response,
-  //   @Param('customerId', ParseIntPipe) customerId: number,
-  // ) {
-  //   const customer = await this.customerService.getCustomerDetail(customerId);
-  //   this.responseService.success(res, '회원 조회 성공', customer);
-  // }
-
-  /* 회원 정보 수정 */
-  @Patch(':customerId')
-  async updateCustomer(
-    @Res() res: Response,
-    @Param('customerId', ParseIntPipe) customerId: number,
-    @Body() editCustomerDto: EditCustomerDto,
-  ) {
-    await this.customerService.updateCustomer(customerId, editCustomerDto);
-
-    this.responseService.success(res, '회원 정보 수정 성공');
-  }
-
-  /* 회원 정보 삭제 (soft delete) */
-  @Delete(':customerId')
-  async softDeleteCustomer(
-    @Res() res: Response,
-    @Param('customerId', ParseIntPipe) customerId: number,
-  ) {
-    await this.customerService.softDeleteCustomer(customerId);
-
-    this.responseService.success(res, '회원 정보 삭제 성공');
-  }
 }
