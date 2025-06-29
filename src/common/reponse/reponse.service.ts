@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 
 @Injectable()
@@ -14,14 +14,17 @@ export class ResponseService {
   error(
     res: Response,
     message: string,
-    statusCode: number = 400,
+    statusCode: number = HttpStatus.BAD_REQUEST,
     errors: any = null,
   ) {
-    return res.status(statusCode).json({
-      status: false,
-      message,
-      errors,
-    });
+    throw new HttpException(
+      {
+        status: false,
+        message,
+        errors,
+      },
+      statusCode,
+    );
   }
 
   unauthorized(res: Response, message: string) {

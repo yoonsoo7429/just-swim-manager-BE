@@ -9,20 +9,18 @@ import { Provider } from 'src/auth/enum/provider.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
-  @IsNotEmpty()
   @IsEnum(Provider)
-  provider: Provider;
+  readonly provider: Provider;
+
+  @IsNotEmpty()
+  @IsEmail()
+  readonly email: string;
 
   @IsNotEmpty()
   @IsString()
-  name: string;
+  readonly name: string;
 
+  @IsOptional()
   @IsString()
-  birth: string;
-
-  @IsString()
-  phoneNumber: string;
+  readonly profileImage?: string;
 }

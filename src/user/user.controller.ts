@@ -10,6 +10,7 @@ export class UserController {
     private readonly userService: UserService,
     private readonly responseService: ResponseService,
   ) {}
+
   /* 프로필 정보 */
   @Get()
   async getUserDetail(@Res() res: Response) {
@@ -17,7 +18,7 @@ export class UserController {
 
     const userInfo = await this.userService.findUserByPk(userId);
 
-    this.responseService.success(res, '프로필 조회 성공', userInfo);
+    return this.responseService.success(res, '프로필 조회 성공', userInfo);
   }
 
   /* user 정보 수정 */
@@ -26,11 +27,10 @@ export class UserController {
     const { userId } = res.locals.user;
 
     if (editUserDto.userType) {
-      await this.userService.completeUserInfo(userId, editUserDto);
     }
 
     await this.userService.editUser(userId, editUserDto);
 
-    this.responseService.success(res, '프로필 정보 수정 성공');
+    return this.responseService.success(res, '프로필 정보 수정 성공');
   }
 }

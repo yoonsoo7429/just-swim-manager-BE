@@ -12,9 +12,11 @@ import { AuthService } from './auth.service';
 import { ResponseService } from 'src/common/reponse/reponse.service';
 import { Request, Response } from 'express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { KakaoAuthGuard } from './guard/kakao.guard';
+import { KakaoAuthGuard } from '../common/guards/kakao.guard';
 import { UserType } from 'src/user/enum/user-type.enum';
 import { Provider } from './enum/provider.enum';
+import { EditUserDto } from 'src/user/dto/edit-user.dto';
+import { SkipAuth } from '../common/decorator/skip-auth.decorator';
 
 @Controller()
 export class AuthController {
@@ -24,12 +26,14 @@ export class AuthController {
   ) {}
 
   /* kakao 소셜 로그인 (Guard를 통해 접근) */
+  @SkipAuth()
   @UseGuards(KakaoAuthGuard)
   @Get('Oauth/kakao')
   async kakaoLogin(): Promise<void> {
     return;
   }
 
+  @SkipAuth()
   @UseGuards(KakaoAuthGuard)
   @Get('Oauth/kakao/callback')
   async kakaoCallback(
@@ -38,16 +42,9 @@ export class AuthController {
   ): Promise<void> {
     let profile: any = req.user;
     let provider: Provider = profile.provider;
-    let name: string = profile._json.kakao_account.name;
+    let name: string = profile._json.kakao_account.nickname;
     let email: string = profile._json.kakao_account.email;
-    // birth
-    let birthYear: string = profile._json.kakao_account.birthyear;
-    let birthDay: string = profile._json.kakao_account.birthday;
-    let birth: string = `${birthYear}.${birthDay.substring(0, 2)}.${birthDay.substring(2)}`;
-    // phoneNumber
-    let phone_number: string = profile._json.kakao_account.phone_number;
-    let cleanedNumber: string = phone_number.replace(/\D/g, '');
-    let phoneNumber: string = `010-${cleanedNumber.substring(4, 8)}-${cleanedNumber.substring(8, 13)}`;
+    let profileImage: string = profile._json.properties.profile_image;
 
     const exUser = await this.authService.validateUser(email, provider);
     // user가 존재할 경우 로그인 시도
@@ -77,13 +74,25 @@ export class AuthController {
         provider,
         email,
         name,
-        birth,
-        phoneNumber,
+        profileImage,
       };
       const newUser = await this.authService.createUser(newUserData);
       const token = await this.authService.generateJwtToken(newUser.userId);
       const query = '?token=' + token;
       res.redirect(process.env.SELECT_USERTYPE_REDIRECT_URI + `/${query}`);
     }
+  }
+
+  /* user 추가 정보 입력 */
+  @Patch('auth')
+  async completeUserInfo(
+    @Res() res: Response,
+    @Body() editUserDto: EditUserDto,
+  ) {
+    const { userId } = res.locals.user;
+
+    await this.authService.completeUserInfo(userId, editUserDto);
+
+    return this.responseService.success(res, '프로필 추가 정보 입력 완료');
   }
 }

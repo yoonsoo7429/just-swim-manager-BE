@@ -19,18 +19,6 @@ export class UserService {
     return await this.userRepository.findUserByPk(userId);
   }
 
-  /* 처음 회원 정보 완료하기 */
-  async completeUserInfo(
-    userId: number,
-    editUserDto: EditUserDto,
-  ): Promise<void> {
-    const user = await this.userRepository.findUserByPk(userId);
-    if (!user) {
-      throw new UnauthorizedException('회원 정보를 완성할 수 없습니다.');
-    }
-    await this.userRepository.editUser(userId, editUserDto);
-  }
-
   /* user 정보 수정 */
   async editUser(userId: number, editUserDto: EditUserDto): Promise<void> {
     const user = await this.userRepository.findUserByPk(userId);

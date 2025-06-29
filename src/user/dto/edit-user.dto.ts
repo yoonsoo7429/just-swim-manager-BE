@@ -3,14 +3,18 @@ import { UserType } from '../enum/user-type.enum';
 
 export class EditUserDto {
   @IsOptional()
-  @IsString()
-  phoneNumber: string;
-
-  @IsOptional()
-  @IsString()
-  address: string;
-
-  @IsOptional()
   @IsEnum(UserType)
   userType: UserType;
+
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  birth: string;
+
+  @IsOptional()
+  @IsString()
+  phoneNumber: string;
 }

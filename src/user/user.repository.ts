@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { EditUserDto } from './dto/edit-user.dto';
 import { Provider } from 'src/auth/enum/provider.enum';
+import { Status } from 'src/common/enum/status.enum';
 
 @Injectable()
 export class UserRepository {
@@ -31,7 +32,16 @@ export class UserRepository {
   }
 
   /* user 정보 수정 */
-  async editUser(userId: number, editUserDto: EditUserDto): Promise<void> {
-    await this.userRepository.update({ userId }, editUserDto);
+  async editUser(
+    userId: number,
+    editUserDto: EditUserDto,
+    instructorStatus?: Status | null,
+  ): Promise<void> {
+    const updateData =
+      instructorStatus !== undefined && instructorStatus !== null
+        ? { ...editUserDto, instructorStatus }
+        : editUserDto;
+
+    await this.userRepository.update({ userId }, updateData);
   }
 }

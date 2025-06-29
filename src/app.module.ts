@@ -14,10 +14,13 @@ import { ExcelModule } from './excel/excel.module';
 import { AuthModule } from './auth/auth.module';
 import { ReponseModule } from './common/reponse/reponse.module';
 import { JwtService } from '@nestjs/jwt';
-import { AuthMiddleWare } from './auth/middleware/auth.middleware';
 import { LectureModule } from './lecture/lecture.module';
 import { UserModule } from './user/user.module';
 import { InstructorModule } from './instructor/instructor.module';
+import { AdminModule } from './admin/admin.module';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './common/guards/auth.guard';
+import { HttpExceptionFilter } from './common/reponse/http-exception.filter';
 
 @Module({
   imports: [
@@ -56,23 +59,14 @@ import { InstructorModule } from './instructor/instructor.module';
     LectureModule,
     UserModule,
     InstructorModule,
+    AdminModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService],
+  providers: [
+    AppService,
+    JwtService,
+    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_FILTER, useClass: HttpExceptionFilter },
+  ],
 })
-export class AppModule implements NestModule {
-  // middleware 전역으로 사용
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleWare)
-      .exclude(
-        { path: 'Oauth/kakao', method: RequestMethod.GET },
-        { path: 'Oauth/kakao/callback', method: RequestMethod.GET },
-        { path: 'login', method: RequestMethod.POST },
-      )
-      .forRoutes({
-        path: '*',
-        method: RequestMethod.ALL,
-      });
-  }
-}
+export class AppModule {}
