@@ -6,37 +6,53 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { LectureLevel } from '../enum/lecture-level.enum';
+import { LectureType } from '../enum/lecture-type.enum';
 import { User } from 'src/user/entity/user.entity';
 import { BaseTable } from 'src/common/entity/base-table.entity';
+import { LectureDay } from './lecture-day.entity';
 
 @Entity('lecture')
 export class Lecture extends BaseTable {
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
   lectureId: number;
 
-  @ManyToOne(() => User, (user) => user.lecture)
-  @JoinColumn({ name: 'userId' })
-  user: User;
+  @Column({ type: 'enum', enum: LectureType })
+  lectureType: LectureType;
 
   @Column({ type: 'varchar' })
   lectureTitle: string;
 
-  @Column({ type: 'enum', enum: LectureLevel, nullable: true })
-  lectureLevel: LectureLevel;
+  @Column({ type: 'varchar' })
+  lectureContent: string;
 
   @Column({ type: 'varchar' })
-  lectureDays: string;
+  lectureLocation: string;
+
+  @Column({ type: 'date', nullable: true })
+  lectureStartDate: Date;
+
+  @Column({ type: 'date', nullable: true })
+  lectureEndDate: Date;
 
   @Column({ type: 'varchar' })
-  lectureTime: string;
+  lectureStartTime: string;
 
   @Column({ type: 'varchar' })
-  lectureFee: string;
+  lectureEndTime: string;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: 'int' })
+  lecturePrice: number;
+
+  @Column({ type: 'int' })
   lectureCapacity: number;
 
-  @Column({ type: 'varchar', nullable: true })
-  lectureDate: string;
+  @ManyToOne(() => User, (user) => user.lecture)
+  @JoinColumn({ name: 'instructorId' })
+  instructor: User;
+
+  @OneToMany(() => LectureDay, (day) => day.lecture, {
+    cascade: true,
+    eager: true,
+  })
+  days: LectureDay[];
 }

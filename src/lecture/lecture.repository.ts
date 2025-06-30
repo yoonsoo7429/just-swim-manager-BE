@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Lecture } from './entity/lecture.entity';
-import { Repository, UpdateResult } from 'typeorm';
+import { EntityManager, Repository, UpdateResult } from 'typeorm';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { EditLectureDto } from './dto/edit-lecture.dto';
 
@@ -12,53 +12,50 @@ export class LectureRepository {
     private lectureRepository: Repository<Lecture>,
   ) {}
 
-  /* 수업 등록 */
+  /* 강의 등록 */
   async createLecture(
+    manager: EntityManager,
     userId: number,
     createLectureDto: CreateLectureDto,
   ): Promise<Lecture> {
-    return await this.lectureRepository.save({
-      user: { userId },
+    const lecture = manager.create(Lecture, {
       ...createLectureDto,
+      instructor: { userId },
+    });
+
+    return await manager.save(lecture);
+  }
+
+  /* 강의 전체 조회 */
+  async findAllLectures(): Promise<Lecture[]> {
+    return this.lectureRepository
+      .createQueryBuilder('lecture')
+      .leftJoinAndSelect('lecture.days', 'days')
+      .leftJoinAndSelect('lecture.instructor', 'instructor')
+      .orderBy('ISNULL(lecture.lectureStartDate)', 'ASC')
+      .addOrderBy('lecture.lectureStartDate', 'DESC')
+      .getMany();
+  }
+
+  /* 강의 상세 조회 */
+  async findLectureDetail(lectureId: number): Promise<Lecture> {
+    return this.lectureRepository.findOne({
+      where: { lectureId },
+      relations: ['days', 'instructor'],
     });
   }
 
-  /* 수업 전체 조회(강사용) */
-  async findAllLecturesForInsturctor(userId: number): Promise<Lecture[]> {
-    return await this.lectureRepository.find({
-      where: { user: { userId } },
-      relations: ['member', 'member.user', 'registration'],
-    });
-  }
-
-  /* 수업 전체 조회(고객용) */
-  async findAllLecturesForCustomer(): Promise<Lecture[]> {
-    return await this.lectureRepository.find({
-      relations: ['member', 'member.user', 'registration'],
-    });
-  }
-
-  /* 수업 상세 조회 */
-  async findLectureDetail(userId: number, lectureId: number): Promise<Lecture> {
-    return await this.lectureRepository.findOne({
-      where: { user: { userId }, lectureId },
-      relations: ['member', 'member.user'],
-    });
-  }
-
-  /* 수업 수정 */
-  async editLecture(
+  /* 강의 정보 수정 */
+  async updateLecture(
+    manager: EntityManager,
     lectureId: number,
     editLectureDto: EditLectureDto,
-  ): Promise<UpdateResult> {
-    return await this.lectureRepository.update({ lectureId }, editLectureDto);
+  ): Promise<void> {
+    await manager.update(Lecture, { lectureId }, editLectureDto);
   }
 
-  /* 수업 삭제 (soft delete) */
-  async softDeleteLecture(lectureId: number): Promise<UpdateResult> {
-    return await this.lectureRepository.update(
-      { lectureId },
-      { deletedAt: new Date() },
-    );
+  /* 강의 삭제 */
+  async deleteLecture(lectureId: number): Promise<void> {
+    await this.lectureRepository.delete({ lectureId });
   }
 }

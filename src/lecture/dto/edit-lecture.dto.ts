@@ -1,32 +1,64 @@
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { LectureLevel } from '../enum/lecture-level.enum';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateIf,
+} from 'class-validator';
+import { LectureType } from '../enum/lecture-type.enum';
+import { Type } from 'class-transformer';
+import { DayOfWeek } from 'src/common/enum/day-of-week.enum';
 
 export class EditLectureDto {
   @IsOptional()
-  @IsString()
-  lectureTitle: string;
-
-  @IsOptional()
-  @IsEnum(LectureLevel)
-  lectureLevel: LectureLevel;
+  @IsEnum(LectureType)
+  lectureType?: LectureType;
 
   @IsOptional()
   @IsString()
-  lectureDays: string;
+  lectureTitle?: string;
 
   @IsOptional()
   @IsString()
-  lectureTime: string;
+  lectureContent?: string;
 
   @IsOptional()
   @IsString()
-  lectureFee: string;
+  lectureLocation?: string;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  lectureStartDate?: Date;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  lectureEndDate?: Date;
+
+  @IsOptional()
+  @IsString()
+  lectureStartTime?: string;
+
+  @IsOptional()
+  @IsString()
+  lectureEndTime?: string;
 
   @IsOptional()
   @IsNumber()
-  lectureCapacity: number;
+  lecturePrice?: number;
 
   @IsOptional()
-  @IsString()
-  lectureDate: string;
+  @IsNumber()
+  lectureCapacity?: number;
+
+  @ValidateIf((o) => o.lectureType !== LectureType.ONE_DAY)
+  @IsOptional()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsEnum(DayOfWeek, { each: true })
+  lectureDays?: DayOfWeek[];
 }

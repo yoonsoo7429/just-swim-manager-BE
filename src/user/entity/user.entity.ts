@@ -31,6 +31,6 @@ export class User extends BaseTable {
   @Column({ type: 'enum', enum: Status, nullable: true })
   instructorStatus: Status;
 
-  @OneToMany(() => Lecture, (lecture) => lecture.user)
+  @OneToMany(() => Lecture, (lecture) => lecture.instructor)
   lecture: Lecture[];
 }
