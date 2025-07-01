@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { LectureRepository } from './lecture.repository';
 import { CreateLectureDto } from './dto/create-lecture.dto';
-import { Lecture } from './entity/lecture.entity';
+import { Lecture } from './entities/lecture.entity';
 import { EditLectureDto } from './dto/edit-lecture.dto';
 import { UserType } from 'src/user/enum/user-type.enum';
 import { LectureDayRepository } from './lecture-day.repository';

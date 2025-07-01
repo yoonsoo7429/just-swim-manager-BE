@@ -7,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { LectureType } from '../enum/lecture-type.enum';
-import { User } from 'src/user/entity/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import { BaseTable } from 'src/common/entity/base-table.entity';
 import { LectureDay } from './lecture-day.entity';
+import { Enrollment } from 'src/enrollment/entities/enrollment.entity';
 
 @Entity('lecture')
 export class Lecture extends BaseTable {
@@ -55,4 +56,9 @@ export class Lecture extends BaseTable {
     eager: true,
   })
   days: LectureDay[];
+
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.lecture, {
+    cascade: true,
+  })
+  enrollment: Enrollment[];
 }

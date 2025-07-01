@@ -4,9 +4,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Lecture } from 'src/lecture/entity/lecture.entity';
+import { Lecture } from 'src/lecture/entities/lecture.entity';
 import { UserRepository } from 'src/user/user.repository';
-import { User } from 'src/user/entity/user.entity';
+import { User } from 'src/user/entities/user.entity';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { Provider } from './enum/provider.enum';
 import { EditUserDto } from 'src/user/dto/edit-user.dto';

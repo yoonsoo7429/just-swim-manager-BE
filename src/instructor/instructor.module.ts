@@ -3,7 +3,7 @@ import { InstructorController } from './instructor.controller';
 import { InstructorService } from './instructor.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InstructorRepository } from './instructor.repository';
-import { User } from 'src/user/entity/user.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],

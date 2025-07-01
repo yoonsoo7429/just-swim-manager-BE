@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Lecture } from './entity/lecture.entity';
+import { Lecture } from './entities/lecture.entity';
 import { EntityManager, LessThan, Repository, UpdateResult } from 'typeorm';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { EditLectureDto } from './dto/edit-lecture.dto';

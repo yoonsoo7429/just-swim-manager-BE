@@ -22,6 +22,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
 import { HttpExceptionFilter } from './common/reponse/http-exception.filter';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EnrollmentModule } from './enrollment/enrollment.module';
 
 @Module({
   imports: [
@@ -62,6 +63,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     UserModule,
     InstructorModule,
     AdminModule,
+    EnrollmentModule,
   ],
   controllers: [AppController],
   providers: [

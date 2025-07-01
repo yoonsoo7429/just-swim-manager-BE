@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LectureDay } from './entity/lecture-day.entity';
+import { LectureDay } from './entities/lecture-day.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { DayOfWeek } from 'src/common/enum/day-of-week.enum';
-import { Lecture } from './entity/lecture.entity';
+import { Lecture } from './entities/lecture.entity';
 
 @Injectable()
 export class LectureDayRepository {
