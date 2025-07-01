@@ -11,6 +11,7 @@ import { UserType } from 'src/user/enum/user-type.enum';
 import { LectureDayRepository } from './lecture-day.repository';
 import { DataSource } from 'typeorm';
 import { LectureType } from './enum/lecture-type.enum';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class LectureService {
@@ -19,6 +20,16 @@ export class LectureService {
     private readonly lectureDayRepository: LectureDayRepository,
     private readonly dataSource: DataSource,
   ) {}
+
+  /* 강의 EndDate에 맞춰 지난 강의로 변경 */
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async softDeleteExpiredLectures() {
+    const today = new Date();
+
+    await this.lectureRepository.softDeleteExpiredLectures(today);
+
+    // 나중에 로깅해주는게 좋음
+  }
 
   /* 강의 생성 */
   async createLecture(userId: number, createLectureDto: CreateLectureDto) {

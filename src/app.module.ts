@@ -21,6 +21,7 @@ import { AdminModule } from './admin/admin.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
 import { HttpExceptionFilter } from './common/reponse/http-exception.filter';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { HttpExceptionFilter } from './common/reponse/http-exception.filter';
       }),
       inject: [ConfigService],
     }),
+    ScheduleModule.forRoot(),
     CustomerModule,
     ExcelModule,
     AuthModule,

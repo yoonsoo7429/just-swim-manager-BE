@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Lecture } from './entity/lecture.entity';
-import { EntityManager, Repository, UpdateResult } from 'typeorm';
+import { EntityManager, LessThan, Repository, UpdateResult } from 'typeorm';
 import { CreateLectureDto } from './dto/create-lecture.dto';
 import { EditLectureDto } from './dto/edit-lecture.dto';
 
@@ -57,5 +57,13 @@ export class LectureRepository {
   /* 강의 삭제 */
   async deleteLecture(lectureId: number): Promise<void> {
     await this.lectureRepository.delete({ lectureId });
+  }
+
+  /* 강의 EndDate에 맞춰 지난 강의로 변경 */
+  async softDeleteExpiredLectures(today: Date): Promise<void> {
+    await this.lectureRepository.update(
+      { lectureEndDate: LessThan(today) },
+      { deletedAt: today },
+    );
   }
 }
