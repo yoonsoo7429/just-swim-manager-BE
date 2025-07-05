@@ -12,7 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CustomerModule } from './customer/customer.module';
 import { ExcelModule } from './excel/excel.module';
 import { AuthModule } from './auth/auth.module';
-import { ReponseModule } from './common/reponse/reponse.module';
+import { ResponseModule } from './common/response/response.module';
 import { JwtService } from '@nestjs/jwt';
 import { LectureModule } from './lecture/lecture.module';
 import { UserModule } from './user/user.module';
@@ -20,7 +20,7 @@ import { InstructorModule } from './instructor/instructor.module';
 import { AdminModule } from './admin/admin.module';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
-import { HttpExceptionFilter } from './common/reponse/http-exception.filter';
+import { HttpExceptionFilter } from './common/response/http-exception.filter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EnrollmentModule } from './enrollment/enrollment.module';
 
@@ -58,7 +58,7 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
     CustomerModule,
     ExcelModule,
     AuthModule,
-    ReponseModule,
+    ResponseModule,
     LectureModule,
     UserModule,
     InstructorModule,

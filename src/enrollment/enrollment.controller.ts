@@ -15,7 +15,7 @@ import { RolesGuard } from 'src/common/guards/role.guard';
 import { Roles } from 'src/common/decorator/roles.decorator';
 import { UserType } from 'src/user/enum/user-type.enum';
 import { Response } from 'express';
-import { ResponseService } from 'src/common/reponse/reponse.service';
+import { ResponseService } from 'src/common/response/response.service';
 import { Status } from 'src/common/enum/status.enum';
 
 @Controller('enrollment')

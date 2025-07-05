@@ -17,14 +17,11 @@ export class ResponseService {
     statusCode: number = HttpStatus.BAD_REQUEST,
     errors: any = null,
   ) {
-    throw new HttpException(
-      {
-        status: false,
-        message,
-        errors,
-      },
-      statusCode,
-    );
+    return res.status(statusCode).json({
+      status: false,
+      message,
+      errors,
+    });
   }
 
   unauthorized(res: Response, message: string) {

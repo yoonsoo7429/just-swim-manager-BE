@@ -12,7 +12,7 @@ import {
 import { CustomerService } from './customer.service';
 import { Response } from 'express';
 import { CreateCustomerDto } from './dto/create-customer.dto';
-import { ResponseService } from 'src/common/reponse/reponse.service';
+import { ResponseService } from 'src/common/response/response.service';
 import { EditCustomerDto } from './dto/edit-customer.dto';
 
 @Controller('customer')

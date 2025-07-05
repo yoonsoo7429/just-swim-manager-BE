@@ -13,7 +13,7 @@ import { AdminService } from './admin.service';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import { UserType } from 'src/user/enum/user-type.enum';
 import { Roles } from 'src/common/decorator/roles.decorator';
-import { ResponseService } from 'src/common/reponse/reponse.service';
+import { ResponseService } from 'src/common/response/response.service';
 import { Response } from 'express';
 import { UpdateInstructorStatusDto } from './dto/update-instructor-status.dto';
 

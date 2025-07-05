@@ -27,7 +27,6 @@ export class UserRepository {
   async findUserByPk(userId: number): Promise<User> {
     return await this.userRepository.findOne({
       where: { userId },
-      relations: ['customer', 'instructor'],
     });
   }
 

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch, Res } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ResponseService } from 'src/common/reponse/reponse.service';
+import { ResponseService } from 'src/common/response/response.service';
 import { Response } from 'express';
 import { EditUserDto } from './dto/edit-user.dto';
 
@@ -18,7 +18,7 @@ export class UserController {
 
     const userInfo = await this.userService.findUserByPk(userId);
 
-    return this.responseService.success(res, '프로필 조회 성공', userInfo);
+    this.responseService.success(res, '프로필 조회 성공', userInfo);
   }
 
   /* user 정보 수정 */

@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ResponseService } from 'src/common/reponse/reponse.service';
+import { ResponseService } from 'src/common/response/response.service';
 import { Request, Response } from 'express';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { KakaoAuthGuard } from '../common/guards/kakao.guard';
@@ -42,7 +42,7 @@ export class AuthController {
   ): Promise<void> {
     let profile: any = req.user;
     let provider: Provider = profile.provider;
-    let name: string = profile._json.kakao_account.nickname;
+    let name: string = profile.username;
     let email: string = profile._json.kakao_account.email;
     let profileImage: string = profile._json.properties.profile_image;
 
@@ -84,7 +84,7 @@ export class AuthController {
   }
 
   /* user 추가 정보 입력 */
-  @Patch('auth')
+  @Patch('userInfo')
   async completeUserInfo(
     @Res() res: Response,
     @Body() editUserDto: EditUserDto,
